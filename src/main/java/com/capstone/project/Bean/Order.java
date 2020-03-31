@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Restaurant {
-
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private Long unit;
-    private String street;
-    private String city;
-    private String postal;
-    private String phone;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<Dish> dishes = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private Restaurant restaurant;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    private Float total;
 }
