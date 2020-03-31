@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class HomeController {
     private RestaurantRepository restaurantRepo;
+
     @GetMapping("/api/restaurant")
     public Restaurant getRestaurant(@RequestParam Long id)
     {
         Restaurant foundRestaurant=restaurantRepo.findById(id).get();
         return foundRestaurant;
     }
+
+
 }
