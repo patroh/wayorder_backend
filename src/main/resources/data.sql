@@ -7,3 +7,4 @@ INSERT INTO DISH (name,image,star,reviews,likes,price) values ('Chicken Tandoori
                                                                412,
                                                                19.24);
 INSERT INTO RESTAURANT_DISHES values (1,1);
+INSERT INTO RESTAURANT_DISHES values (1,2);
