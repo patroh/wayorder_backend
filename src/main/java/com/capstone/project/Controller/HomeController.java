@@ -26,7 +26,7 @@ public class HomeController {
         return foundRestaurant;
     }
 
-    @PutMapping("/order")
+    @PostMapping("/order")
     public boolean makeOrder(@RequestBody List<OrderItem> items,@RequestBody Long restaurantID){
         boolean status = false;
         List<OrderItem> savedItems = orderItemRepository.saveAll(items);
