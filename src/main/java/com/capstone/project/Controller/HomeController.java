@@ -26,11 +26,11 @@ public class HomeController {
         return foundRestaurant;
     }
 
-    @PostMapping(value = "/order", produces = "application/json")
-    public Order makeOrder(@RequestBody List<OrderItem> items){
+    @PostMapping(value = "/order/{id}", produces = "application/json")
+    public Order makeOrder(@RequestBody List<OrderItem> items,@PathVariable Long id){
         boolean status = false;
         List<OrderItem> savedItems = orderItemRepository.saveAll(items);
-        Restaurant restaurant = restaurantRepo.findById(Long.valueOf(1)).get();
+        Restaurant restaurant = restaurantRepo.findById(id).get();
         Order newOrder = Order.builder().restaurant(restaurant).orderItems(items).total(10.10f).build();
 
         Order placedOrder = orderRepository.save(newOrder);
