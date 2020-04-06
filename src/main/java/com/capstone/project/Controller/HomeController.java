@@ -19,6 +19,7 @@ public class HomeController {
     private OrderRepository orderRepository;
     private OrderItemRepository orderItemRepository;
 
+    //Return the restaurant object
     @GetMapping("/restaurant")
     public Restaurant getRestaurant(@RequestParam Long id)
     {
@@ -26,13 +27,14 @@ public class HomeController {
         return foundRestaurant;
     }
 
+
+    //Makes an order from the items , save to repository and return the saved order
     @PostMapping(value = "/order/{id}", produces = "application/json")
     public Order makeOrder(@RequestBody List<OrderItem> items,@PathVariable Long id){
-        boolean status = false;
         float total = 0;
         List<OrderItem> savedItems = orderItemRepository.saveAll(items);
         for(OrderItem o: savedItems){
-            total+=(o.getQuantity()*o.getDish().getPrice());
+            total += (o.getQuantity() * o.getDish().getPrice());
         }
         Restaurant restaurant = restaurantRepo.findById(id).get();
         Order newOrder = Order.builder().restaurant(restaurant).orderItems(items).total(total).build();
@@ -41,6 +43,8 @@ public class HomeController {
         return placedOrder;
     }
 
+
+    //Returns all orders
     @GetMapping("/orders")
     public List<Order> getAllOrders(){
         return orderRepository.findAll();
