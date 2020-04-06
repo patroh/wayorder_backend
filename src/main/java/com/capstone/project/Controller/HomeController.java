@@ -32,6 +32,7 @@ public class HomeController {
         List<OrderItem> savedItems = orderItemRepository.saveAll(items);
         Restaurant restaurant = restaurantRepo.findById(Long.valueOf(1)).get();
         Order newOrder = Order.builder().restaurant(restaurant).orderItems(items).total(10.10f).build();
+
         Order placedOrder = orderRepository.save(newOrder);
         return placedOrder;
     }
