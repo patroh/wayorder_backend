@@ -26,14 +26,14 @@ public class HomeController {
         return foundRestaurant;
     }
 
-    @PostMapping("/order")
-    public boolean makeOrder(@RequestBody List<OrderItem> items,@RequestBody Long restaurantID){
+    @PostMapping(value = "/order", produces = "application/json")
+    public Order makeOrder(@RequestBody List<OrderItem> items){
         boolean status = false;
         List<OrderItem> savedItems = orderItemRepository.saveAll(items);
-        Restaurant restaurant = restaurantRepo.findById(restaurantID).get();
-        Order newOrder = Order.builder().restaurant(restaurant).orderItems(savedItems).build();
-        orderRepository.save(newOrder);
-        return status;
+        Restaurant restaurant = restaurantRepo.findById(Long.valueOf(1)).get();
+        Order newOrder = Order.builder().restaurant(restaurant).orderItems(items).total(10.10f).build();
+        Order placedOrder = orderRepository.save(newOrder);
+        return placedOrder;
     }
 
     @GetMapping("/orders")
