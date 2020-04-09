@@ -1,3 +1,5 @@
+INSERT INTO USER (email,password) VALUES ( 'rohan@gmail.com','1234' );
+
 INSERT INTO RESTAURANT (name, unit, street, city, postal, phone)
 values ('Baba Dhaba', 55, 'Navigator Dr', 'Mississauga', 'L5W1P5', '6665656565');
 
