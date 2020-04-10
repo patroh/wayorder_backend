@@ -1,9 +1,6 @@
 package com.capstone.project.Bean;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,5 +27,8 @@ public class User {
 
 	@NonNull
 	private String password;
+
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private List<Order> orders;
 
 }

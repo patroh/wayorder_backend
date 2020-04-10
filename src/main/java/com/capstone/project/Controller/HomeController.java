@@ -32,9 +32,10 @@ public class HomeController {
 
 
     //Makes an order from the items , save to repository and return the saved order
-    @PostMapping(value = "/order/{id}", produces = "application/json")
-    public Order makeOrder(@RequestBody List<OrderItem> items,@PathVariable Long id){
+    @PostMapping(value = "/order/{id}/{uid}", produces = "application/json")
+    public Order makeOrder(@RequestBody List<OrderItem> items,@PathVariable Long id,@PathVariable Long uid){
         float total = 0;
+        User user = userRepository.findById(uid).get();
         List<OrderItem> savedItems = orderItemRepository.saveAll(items);
         for(OrderItem o: savedItems){
             total += (o.getQuantity() * o.getDish().getPrice());
@@ -43,6 +44,8 @@ public class HomeController {
         Order newOrder = Order.builder().restaurant(restaurant).orderItems(items).total(total).build();
 
         Order placedOrder = orderRepository.save(newOrder);
+        user.getOrders().add(placedOrder);
+        userRepository.save(user);
         return placedOrder;
     }
 
