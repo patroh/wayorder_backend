@@ -1,6 +1,7 @@
 package com.capstone.project.Bean;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,10 +23,12 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NonNull
+	@NotNull
+	private String fullname;
+	@NotNull
 	private String email;
 
-	@NonNull
+	@NotNull
 	private String password;
 
 	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
