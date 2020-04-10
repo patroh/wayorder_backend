@@ -28,7 +28,7 @@ public class User {
 	@NonNull
 	private String password;
 
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
 	private List<Order> orders;
 
 }
