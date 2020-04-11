@@ -1,13 +1,7 @@
 package com.capstone.project.Controller;
 
-import com.capstone.project.Bean.Order;
-import com.capstone.project.Bean.OrderItem;
-import com.capstone.project.Bean.Restaurant;
-import com.capstone.project.Bean.User;
-import com.capstone.project.Repo.OrderItemRepository;
-import com.capstone.project.Repo.OrderRepository;
-import com.capstone.project.Repo.RestaurantRepository;
-import com.capstone.project.Repo.UserRepository;
+import com.capstone.project.Bean.*;
+import com.capstone.project.Repo.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +15,7 @@ public class ApiController {
     private OrderRepository orderRepository;
     private OrderItemRepository orderItemRepository;
     private UserRepository userRepository;
+    private EmailNewsletterRepository emailNewsletterRepository;
 
     //Return the restaurant object
     @GetMapping("/restaurant")
@@ -93,6 +88,9 @@ public class ApiController {
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
+
+    @GetMapping("/emailNewsletters")
+    public List<EmailNewsletter> getAllEmailNewsletter(){return emailNewsletterRepository.findAll();}
 
 
 
