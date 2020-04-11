@@ -28,6 +28,7 @@ public class User {
 	@NotNull
 	private String email;
 
+	// Password encoded by Base64 encoder
 	@NotNull
 	private String password;
 
