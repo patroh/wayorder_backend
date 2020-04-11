@@ -1,7 +1,7 @@
 INSERT INTO USER (fullname,email,password) VALUES ( 'Rohan Patel','rohan@gmail.com','1234' );
 
 INSERT INTO RESTAURANT (name, unit, street, city, postal, phone)
-values ('Baba Dhaba', 55, 'Navigator Dr', 'Mississauga', 'L5W1P5', '6665656565');
+values ('La Mexicana', 55, 'Navigator Dr', 'Mississauga', 'L5W1P5', '6665656565');
 
 
 INSERT INTO DISH (name, image, star, reviews, likes, price)
@@ -18,28 +18,28 @@ values ('Paneer Pizza',
         4.5,
         757,
         12,
-        11.77);
+        10.00);
 
 INSERT INTO DISH (name, image, star, reviews, likes, price)
 values ('Paneer Tikka', 'https://myfancypantry.files.wordpress.com/2013/01/restraunt-style-paneer-tikka-masala.jpg',
         4.5,
         757,
         12,
-        11.77);
+        15.45);
 
 INSERT INTO DISH (name, image, star, reviews, likes, price)
 values ('Mix Veg', 'https://sweetspotnutrition.ca/wp-content/uploads/2019/01/eat-variety-healthy-foods-image-copy.jpg',
         4.5,
         757,
         12,
-        11.77);
+        9.99);
 
 INSERT INTO DISH (name, image, star, reviews, likes, price)
 values ('Seekh Kebab', 'https://i.pinimg.com/originals/87/5c/fd/875cfd391f8dfc4d20fc243b884330b6.jpg',
         4.5,
         757,
         12,
-        11.77);
+        12.00);
 
 INSERT INTO DISH (name, image, star, reviews, likes, price)
 values ('Dal Tadka',
@@ -47,7 +47,7 @@ values ('Dal Tadka',
         4.5,
         757,
         12,
-        11.77);
+        14.22);
 
 INSERT INTO DISH (name, image, star, reviews, likes, price)
 values ('Lasagnia',
@@ -55,7 +55,7 @@ values ('Lasagnia',
         4.5,
         757,
         12,
-        11.77);
+        10.5);
 
 INSERT INTO DISH (name, image, star, reviews, likes, price)
 values ('Alfredo Pasta',
@@ -63,7 +63,7 @@ values ('Alfredo Pasta',
         4.5,
         757,
         12,
-        11.77);
+        8.5);
 
 
 INSERT INTO RESTAURANT_DISHES
