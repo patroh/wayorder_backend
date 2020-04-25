@@ -1,5 +1,7 @@
 package com.capstone.project.Controller;
 
+import com.capstone.project.Bean.Restaurant;
+import com.capstone.project.Bean.RestaurantUser;
 import com.capstone.project.Bean.User;
 import com.capstone.project.Repo.*;
 import lombok.AllArgsConstructor;
@@ -11,13 +13,8 @@ import java.util.List;
 @RequestMapping("/user")
 @AllArgsConstructor
 public class UserController {
-    private RestaurantRepository restaurantRepo;
-    private OrderRepository orderRepository;
-    private OrderItemRepository orderItemRepository;
     private UserRepository userRepository;
-    private EmailNewsletterRepository emailNewsletterRepository;
     private RestaurantUserRepository restaurantUserRepository;
-
 
     // Register customer user in database by checking if it already exist or not
     @PutMapping(value = "/register" , consumes = "application/json")
@@ -43,6 +40,19 @@ public class UserController {
             return foundUser;
         return null;
     }
+
+    //Login the restaurant user
+    @PostMapping(value = "/restaurant/login", consumes = "application/json")
+    public RestaurantUser loginRestaurantUsr(@RequestBody RestaurantUser restaurantUser){
+        RestaurantUser foundUser = restaurantUserRepository.findByEmail(restaurantUser.getEmail());
+        if(foundUser == null){
+            return null;
+        }
+        if(foundUser.getPassword().equals(restaurantUser.getPassword()))
+            return foundUser;
+        return null;
+    }
+
 
     //Returns all users  -- for testing purpose, remove in production
     @GetMapping("/displayAll")

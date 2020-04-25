@@ -11,12 +11,7 @@ import java.util.List;
 @RequestMapping("/api")
 @AllArgsConstructor
 public class ApiController {
-    private RestaurantRepository restaurantRepo;
-    private OrderRepository orderRepository;
-    private OrderItemRepository orderItemRepository;
-    private UserRepository userRepository;
     private EmailNewsletterRepository emailNewsletterRepository;
-    private RestaurantUserRepository restaurantUserRepository;
 
 
     @GetMapping("/emailNewsletters")

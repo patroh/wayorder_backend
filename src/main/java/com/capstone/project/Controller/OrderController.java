@@ -18,8 +18,6 @@ public class OrderController {
     private OrderRepository orderRepository;
     private OrderItemRepository orderItemRepository;
     private UserRepository userRepository;
-    private EmailNewsletterRepository emailNewsletterRepository;
-    private RestaurantUserRepository restaurantUserRepository;
 
 
     //Makes an order from the items , save to repository and return the saved order
