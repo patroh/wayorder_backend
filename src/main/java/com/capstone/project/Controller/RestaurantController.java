@@ -26,6 +26,7 @@ public class RestaurantController {
     }
 
     //Register a new restaurant and return the newly registered restaurant
+    @CrossOrigin(origins = "*")
     @PutMapping(value = "/register", consumes = "application/json")
     public Integer registerRestaurant(@RequestBody Restaurant_User_Holder holder) {
         Restaurant resObj = holder.getRestaurant();
