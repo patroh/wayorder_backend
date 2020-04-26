@@ -42,6 +42,7 @@ public class UserController {
     }
 
     //Login the restaurant user
+    @CrossOrigin(origins = "*")
     @PostMapping(value = "/restaurant/login", consumes = "application/json")
     public RestaurantUser loginRestaurantUsr(@RequestBody RestaurantUser restaurantUser){
         RestaurantUser foundUser = restaurantUserRepository.findByEmail(restaurantUser.getEmail());
