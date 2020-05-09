@@ -1,7 +1,7 @@
 INSERT INTO USER (fullname,email,password) VALUES ( 'Rohan Patel','rohan@gmail.com','MTIzNA==' );
-
-INSERT INTO RESTAURANT (name, unit, street, city, postal, phone)
-values ('La Mexicana', 55, 'Navigator Dr', 'Mississauga', 'L5W1P5', '6665656565');
+INSERT INTO MENU (Id) VALUES (1);
+INSERT INTO RESTAURANT (name, unit, street, city, postal, phone,menu_id)
+values ('La Mexicana', 55, 'Navigator Dr', 'Mississauga', 'L5W1P5', '6665656565',1);
 
 
 INSERT INTO DISH (name, image, star, reviews, likes, price)
