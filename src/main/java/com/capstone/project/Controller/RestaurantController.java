@@ -1,6 +1,8 @@
 package com.capstone.project.Controller;
 
+import com.capstone.project.Bean.Category;
 import com.capstone.project.Bean.Holders.Restaurant_User_Holder;
+import com.capstone.project.Bean.Menu;
 import com.capstone.project.Bean.Restaurant;
 import com.capstone.project.Bean.RestaurantUser;
 import com.capstone.project.Repo.*;
@@ -16,6 +18,8 @@ public class RestaurantController {
 
     private RestaurantRepository restaurantRepo;
     private RestaurantUserRepository restaurantUserRepository;
+    private MenuRepository menuRepository;
+    private CategoryRepository categoryRepository;
 
 
     //Return the restaurant object
@@ -41,6 +45,8 @@ public class RestaurantController {
             RestaurantUser foundRestaurantUser = restaurantUserRepository.findByEmail(resUserObj.getEmail());
 
             if (foundRestaurantUser == null) {
+                Menu emptyMenu = menuRepository.save(new Menu());
+                resObj.setMenu(emptyMenu);
                 Restaurant savedRestaurant = restaurantRepo.save(resObj);
                 resUserObj.setRestaurant(savedRestaurant);
                 foundRestaurantUser = restaurantUserRepository.save(resUserObj);
@@ -50,6 +56,23 @@ public class RestaurantController {
         }
         return 1; // Same detail restaurant exists
     }
+
+
+    //Add new menu category
+    @CrossOrigin(origins = "*")
+    @PutMapping(value = "/{id}/menu/category",consumes = "application/json")
+    public Integer addNewMenuCategory(@RequestBody Category category,@PathVariable("id") Long id){
+        Category savedCategory = categoryRepository.save(category);
+        Restaurant foundRestaurant = restaurantRepo.findById(id).get();
+        Menu foundMenu = foundRestaurant.getMenu();
+        foundMenu.getCategories().add(savedCategory);
+        menuRepository.save(foundMenu);
+        return 0;
+    }
+
+
+
+
 
 
     //Return list of all restaurant, to be removed in production
