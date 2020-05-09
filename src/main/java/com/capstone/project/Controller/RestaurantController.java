@@ -71,6 +71,16 @@ public class RestaurantController {
     }
 
 
+    //Edit category name
+    @CrossOrigin(origins = "*")
+    @PostMapping(value = "/{id}/menu/category",consumes = "application/json")
+    public Integer editMenuCategory(@RequestBody String categoryName,@PathVariable("id") Long id){
+        Category foundCategory = categoryRepository.findById(id).get();
+        foundCategory.setName(categoryName);
+        categoryRepository.save(foundCategory);
+        return 0;
+    }
+
 
 
 
