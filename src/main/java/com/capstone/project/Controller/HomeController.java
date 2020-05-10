@@ -15,15 +15,15 @@ public class HomeController {
     private EmailNewsletterRepository emailNewsletterRepository;
 
     @GetMapping("/")
-    public String index(Model model){
-        model.addAttribute("email",new EmailNewsletter());
+    public String index(Model model) {
+        model.addAttribute("email", new EmailNewsletter());
         return "index";
     }
 
     @PostMapping("/addEmail")
-    public String addEmailToNewsletter(Model model, @ModelAttribute EmailNewsletter emailNewsletter){
+    public String addEmailToNewsletter(Model model, @ModelAttribute EmailNewsletter emailNewsletter) {
         emailNewsletterRepository.save(emailNewsletter);
-        model.addAttribute("email",new EmailNewsletter());
+        model.addAttribute("email", new EmailNewsletter());
         return "index";
     }
 }

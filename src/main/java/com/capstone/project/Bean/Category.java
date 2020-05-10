@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +22,7 @@ public class Category {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Dish> dishes = new ArrayList<>();
+
 }

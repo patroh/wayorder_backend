@@ -2,10 +2,14 @@ package com.capstone.project.Controller;
 
 import com.capstone.project.Bean.Category;
 import com.capstone.project.Bean.Holders.Restaurant_User_Holder;
+import com.capstone.project.Bean.Holders.ReturnData;
 import com.capstone.project.Bean.Menu;
 import com.capstone.project.Bean.Restaurant;
 import com.capstone.project.Bean.RestaurantUser;
-import com.capstone.project.Repo.*;
+import com.capstone.project.Repo.CategoryRepository;
+import com.capstone.project.Repo.MenuRepository;
+import com.capstone.project.Repo.RestaurantRepository;
+import com.capstone.project.Repo.RestaurantUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,29 +64,62 @@ public class RestaurantController {
 
     //Add new menu category
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/{id}/menu/category",consumes = "application/json")
-    public Integer addNewMenuCategory(@RequestBody Category category,@PathVariable("id") Long id){
+    @PutMapping(value = "/{id}/menu/category", consumes = "application/json")
+    public ReturnData addNewMenuCategory(@RequestBody Category category, @PathVariable("id") Long id) {
+        ReturnData returnData = new ReturnData();
+
         Category savedCategory = categoryRepository.save(category);
+        returnData.setObject(savedCategory);
         Restaurant foundRestaurant = restaurantRepo.findById(id).get();
         Menu foundMenu = foundRestaurant.getMenu();
         foundMenu.getCategories().add(savedCategory);
         menuRepository.save(foundMenu);
-        return 0;
+
+        returnData.setCode(0);
+        returnData.setMessage("Category created successfully");
+        return returnData;
     }
 
 
     //Edit category name
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/{id}/menu/category")
-    public Integer editMenuCategory(@RequestParam String categoryName,@PathVariable("id") Long id){
+    public ReturnData editMenuCategory(@RequestParam String categoryName, @PathVariable("id") Long id) {
         Category foundCategory = categoryRepository.findById(id).get();
         foundCategory.setName(categoryName);
-        categoryRepository.save(foundCategory);
-        return 0;
+        foundCategory = categoryRepository.save(foundCategory);
+
+        ReturnData returnData = new ReturnData();
+        returnData.setMessage("Category renamed successfully");
+        returnData.setObject(foundCategory);
+        returnData.setCode(0);
+        return returnData;
     }
 
+    @CrossOrigin(origins = "*")
+    @DeleteMapping(value = "/{id}/menu/category")
+    public ReturnData deleteMenuCategory(@RequestParam Long categoryId, @PathVariable("id") Long id) {
 
+        Restaurant foundRestaurant = restaurantRepo.findById(id).get();
+        Menu foundMenu = foundRestaurant.getMenu();
+        List<Category> categoriesList = foundMenu.getCategories();
 
+        for (int i = 0; i < categoriesList.size(); i++) {
+            if (categoriesList.get(i).getId() == categoryId) {
+                categoriesList.remove(i);
+                break;
+            }
+        }
+
+        foundMenu.setCategories(categoriesList);
+        menuRepository.save(foundMenu);
+        categoryRepository.deleteById(categoryId);
+
+        ReturnData returnData = new ReturnData();
+        returnData.setMessage("Category deleted successfully");
+        returnData.setCode(0);
+        return returnData;
+    }
 
 
     //Return list of all restaurant, to be removed in production
