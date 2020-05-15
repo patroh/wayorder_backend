@@ -126,6 +126,7 @@ public class RestaurantController {
     public ReturnData addMenuItem(@RequestParam Long restaurantId,@RequestParam Long categoryId,@RequestBody Dish dish){
 
         Dish addedDish = dishRepository.save(dish);
+        System.out.println(addedDish);
         Category foundCategory = categoryRepository.findById(categoryId).get();
         foundCategory.getDishes().add(addedDish);
         categoryRepository.save(foundCategory);
