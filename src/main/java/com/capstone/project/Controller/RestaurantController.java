@@ -1,16 +1,11 @@
 package com.capstone.project.Controller;
 
-import com.capstone.project.Bean.Category;
+import com.capstone.project.Bean.*;
 import com.capstone.project.Bean.Holders.Restaurant_User_Holder;
 import com.capstone.project.Bean.Holders.ReturnData;
-import com.capstone.project.Bean.Menu;
-import com.capstone.project.Bean.Restaurant;
-import com.capstone.project.Bean.RestaurantUser;
-import com.capstone.project.Repo.CategoryRepository;
-import com.capstone.project.Repo.MenuRepository;
-import com.capstone.project.Repo.RestaurantRepository;
-import com.capstone.project.Repo.RestaurantUserRepository;
+import com.capstone.project.Repo.*;
 import lombok.AllArgsConstructor;
+import net.bytebuddy.asm.Advice;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +19,7 @@ public class RestaurantController {
     private RestaurantUserRepository restaurantUserRepository;
     private MenuRepository menuRepository;
     private CategoryRepository categoryRepository;
+    private DishRepository dishRepository;
 
 
     //Return the restaurant object
@@ -96,6 +92,8 @@ public class RestaurantController {
         return returnData;
     }
 
+
+    //Delete menu category
     @CrossOrigin(origins = "*")
     @DeleteMapping(value = "/{id}/menu/category")
     public ReturnData deleteMenuCategory(@RequestParam Long categoryId, @PathVariable("id") Long id) {
@@ -121,6 +119,28 @@ public class RestaurantController {
         return returnData;
     }
 
+
+    //Add new menu item
+    @CrossOrigin("*")
+    @PutMapping(value = "/menu/item")
+    public ReturnData addMenuItem(@RequestParam Long restaurantId,@RequestParam Long categoryId,@RequestBody Dish dish){
+
+        Dish addedDish = dishRepository.save(dish);
+        Category foundCategory = categoryRepository.findById(categoryId).get();
+        foundCategory.getDishes().add(addedDish);
+        categoryRepository.save(foundCategory);
+
+        Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
+        foundCategory.getDishes().add(addedDish);
+        restaurantRepo.save(foundRestaurant);
+
+
+        ReturnData returnData = new ReturnData();
+        returnData.setCode(0);
+        returnData.setMessage("Item added successfully");
+        returnData.setObject(addedDish);
+        return returnData;
+    }
 
     //Return list of all restaurant, to be removed in production
     @GetMapping("/displayAll")
