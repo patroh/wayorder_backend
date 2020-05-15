@@ -121,9 +121,9 @@ public class RestaurantController {
 
 
     //Add new menu item
-    @CrossOrigin("*")
-    @PutMapping(value = "/menu/item", consumes = "application/json")
-    public ReturnData addMenuItem(@RequestParam Long restaurantId,@RequestParam Long categoryId,@RequestBody Dish dish){
+    @CrossOrigin(origins = "*")
+    @PutMapping(value = "/{id}/menu/item", consumes = "application/json")
+    public ReturnData addMenuItem(@PathVariable("id") Long restaurantId,@RequestParam Long categoryId,@RequestBody Dish dish){
 
         Dish addedDish = dishRepository.save(dish);
         System.out.println(addedDish);
@@ -134,7 +134,6 @@ public class RestaurantController {
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
         foundCategory.getDishes().add(addedDish);
         restaurantRepo.save(foundRestaurant);
-
 
         ReturnData returnData = new ReturnData();
         returnData.setCode(0);
