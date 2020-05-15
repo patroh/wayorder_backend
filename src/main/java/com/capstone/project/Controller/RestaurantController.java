@@ -133,7 +133,7 @@ public class RestaurantController {
         categoryRepository.save(foundCategory);
 
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
-        foundCategory.getDishes().add(addedDish);
+        foundRestaurant.getDishes().add(addedDish);
         restaurantRepo.save(foundRestaurant);
 
         ReturnData returnData = new ReturnData();
