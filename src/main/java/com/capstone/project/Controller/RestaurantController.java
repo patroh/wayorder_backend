@@ -122,7 +122,7 @@ public class RestaurantController {
 
     //Add new menu item
     @CrossOrigin("*")
-    @PutMapping(value = "/menu/item")
+    @PutMapping(value = "/menu/item", consumes = "application/json")
     public ReturnData addMenuItem(@RequestParam Long restaurantId,@RequestParam Long categoryId,@RequestBody Dish dish){
 
         Dish addedDish = dishRepository.save(dish);
