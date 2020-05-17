@@ -22,6 +22,7 @@ public class Dish {
     @Lob
     private String description;
     private Float price;
+    private Float tax;
     private Float star;
     private Integer reviews;
     private Integer likes;
