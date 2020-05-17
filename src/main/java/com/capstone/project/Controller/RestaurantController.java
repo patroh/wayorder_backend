@@ -126,8 +126,6 @@ public class RestaurantController {
     public ReturnData addMenuItem(@PathVariable("id") Long restaurantId,@RequestParam Long categoryId,@RequestBody Dish dish){
 
         Dish addedDish = dishRepository.save(dish);
-        System.out.println("CATEGORY ID IS : "+categoryId);
-        System.out.println(addedDish);
         Category foundCategory = categoryRepository.findById(categoryId).get();
         foundCategory.getDishes().add(addedDish);
         categoryRepository.save(foundCategory);
@@ -142,6 +140,20 @@ public class RestaurantController {
         returnData.setObject(addedDish);
         return returnData;
     }
+
+
+    //Get menu of the restaurant
+    @CrossOrigin(origins = "*")
+    @GetMapping(value = "/{id}/menu")
+    public ReturnData getRestaurantMenu(@PathVariable("id") Long restaurantId){
+
+        ReturnData returnData = new ReturnData();
+        returnData.setMessage("Menu fetched successfully");
+        returnData.setCode(0);
+        returnData.setObject(restaurantRepo.findById(restaurantId).get().getMenu());
+        return returnData;
+    }
+
 
     //Return list of all restaurant, to be removed in production
     @GetMapping("/displayAll")
