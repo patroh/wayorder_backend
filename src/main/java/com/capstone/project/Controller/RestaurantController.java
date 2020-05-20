@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import net.bytebuddy.asm.Advice;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -141,6 +142,66 @@ public class RestaurantController {
         return returnData;
     }
 
+
+    //Edit menu item
+    @CrossOrigin(origins = "*")
+    @PostMapping(value = "/{id}/menu/item",consumes = "application/json")
+    public ReturnData editMenuItem(@PathVariable("id") Long restaurantId,@RequestParam Long fromCategoryId,@RequestParam Long categoryId,@RequestBody Dish dish){
+
+        Dish editedDish = dishRepository.save(dish);
+        if(fromCategoryId != categoryId) {
+            // Edit the item properties and also change the category
+
+            // Delete the item reference from the current category
+            Category foundCategory  = categoryRepository.findById(fromCategoryId).get();
+            List<Dish> foundDishesInCategory = foundCategory.getDishes();
+
+            for(int i=0 ; i<foundDishesInCategory.size() ; i++){
+                if(foundDishesInCategory.get(i).getId() == editedDish.getId()){
+                    foundDishesInCategory.remove(i);
+                    break;
+                }
+            }
+
+            foundCategory.setDishes(foundDishesInCategory);
+            categoryRepository.save(foundCategory);
+
+
+            // Add the reference of the item to new category
+            foundCategory = categoryRepository.findById(categoryId).get();
+            foundCategory.getDishes().add(editedDish);
+            categoryRepository.save(foundCategory);
+
+        }
+        ReturnData returnData = new ReturnData();
+        returnData.setMessage("Item edited successfully");
+        returnData.setObject(editedDish);
+        return returnData;
+    }
+    //Delete menu item
+    @CrossOrigin(origins = "*")
+    @DeleteMapping(value = "/{id}/menu/item")
+    public ReturnData deleteMenuItem(@PathVariable("id") Long restaurantId,@RequestParam Long categoryId,@RequestParam Long dishId){
+
+        Category foundCategory  = categoryRepository.findById(categoryId).get();
+        List<Dish> foundDishesInCategory = foundCategory.getDishes();
+
+        for(int i=0 ; i<foundDishesInCategory.size() ; i++){
+            if(foundDishesInCategory.get(i).getId() == dishId){
+                foundDishesInCategory.remove(i);
+                break;
+            }
+        }
+
+        foundCategory.setDishes(foundDishesInCategory);
+        categoryRepository.save(foundCategory);
+
+
+        ReturnData returnData = new ReturnData();
+        returnData.setCode(0);
+        returnData.setMessage("Item deleted successfully");
+        return  returnData;
+    }
 
     //Get menu of the restaurant
     @CrossOrigin(origins = "*")
