@@ -148,7 +148,14 @@ public class RestaurantController {
     @PostMapping(value = "/{id}/menu/item",consumes = "application/json")
     public ReturnData editMenuItem(@PathVariable("id") Long restaurantId,@RequestParam Long fromCategoryId,@RequestParam Long categoryId,@RequestBody Dish dish){
 
-        Dish editedDish = dishRepository.save(dish);
+        Dish foundDish = dishRepository.findById(dish.getId()).get();
+        foundDish.setName(dish.getName());
+        foundDish.setDescription(dish.getDescription());
+        foundDish.setPrice(dish.getPrice());
+        foundDish.setTax(dish.getTax());
+        foundDish.setImage(dish.getImage());
+
+        Dish editedDish = dishRepository.save(foundDish);
         if(fromCategoryId != categoryId) {
             // Edit the item properties and also change the category
 
@@ -174,6 +181,7 @@ public class RestaurantController {
 
         }
         ReturnData returnData = new ReturnData();
+        returnData.setCode(0);
         returnData.setMessage("Item edited successfully");
         returnData.setObject(editedDish);
         return returnData;
