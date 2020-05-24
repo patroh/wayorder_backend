@@ -37,6 +37,9 @@ public class RestaurantTableController {
 
         if(foundTable == null){
             RestaurantTable savedTable = tableRepository.save(table);
+            Restaurant foundRestaurant = restaurantRepository.findById(id).get();
+            foundRestaurant.getTables().add(savedTable);
+            restaurantRepository.save(foundRestaurant);
             returnData.setCode(0);
             returnData.setMessage("New table saved successfully");
             returnData.setObject(savedTable);
