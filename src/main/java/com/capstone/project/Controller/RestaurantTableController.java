@@ -30,7 +30,7 @@ public class RestaurantTableController {
 
     // Add new table to restaurant
     @CrossOrigin(origins = "*")
-    @PutMapping("/")
+    @PutMapping(value = "/" , consumes = "application/json")
     public ReturnData addNewTable(@PathVariable("id") Long id, @RequestBody RestaurantTable table){
         ReturnData returnData = new ReturnData();
         RestaurantTable foundTable = tableRepository.findByNumber(table.getNumber());
@@ -51,7 +51,7 @@ public class RestaurantTableController {
 
     // Delete saved table
     @CrossOrigin(origins = "*")
-    @DeleteMapping("/{tid}")
+    @DeleteMapping(value="/{tid}")
     public ReturnData deleteTable(@PathVariable("id") Long id,@PathVariable("tid") Long tableId){
         ReturnData returnData = new ReturnData();
 
