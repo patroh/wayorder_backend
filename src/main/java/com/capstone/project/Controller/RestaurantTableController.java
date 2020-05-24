@@ -29,6 +29,7 @@ public class RestaurantTableController {
 
 
     // Add new table to restaurant
+    @CrossOrigin(origins = "*")
     @PutMapping("/")
     public ReturnData addNewTable(@PathVariable("id") Long id, @RequestBody RestaurantTable table){
         ReturnData returnData = new ReturnData();
@@ -49,6 +50,7 @@ public class RestaurantTableController {
 
 
     // Delete saved table
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{tid}")
     public ReturnData deleteTable(@PathVariable("id") Long id,@PathVariable("tid") Long tableId){
         ReturnData returnData = new ReturnData();
