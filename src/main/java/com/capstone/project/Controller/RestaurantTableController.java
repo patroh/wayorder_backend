@@ -17,7 +17,7 @@ public class RestaurantTableController {
     private RestaurantTableRepository tableRepository;
 
     // Get all tables of restaurant
-    @GetMapping("/")
+    @GetMapping("")
     public ReturnData getTable(@PathVariable("id") Long id){
         ReturnData returnData = new ReturnData();
         Restaurant foundRestaurant = restaurantRepository.findById(id).get();
@@ -30,7 +30,7 @@ public class RestaurantTableController {
 
     // Add new table to restaurant
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/" , consumes = "application/json")
+    @PutMapping(value = "" , consumes = "application/json")
     public ReturnData addNewTable(@PathVariable("id") Long id, @RequestBody RestaurantTable table){
         ReturnData returnData = new ReturnData();
         RestaurantTable foundTable = tableRepository.findByNumber(table.getNumber());
