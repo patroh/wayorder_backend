@@ -31,4 +31,7 @@ public class Restaurant {
 
     @OneToOne
     private Menu menu;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<RestaurantTable> tables = new ArrayList<>();
 }
