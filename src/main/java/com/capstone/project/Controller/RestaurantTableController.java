@@ -5,11 +5,8 @@ import com.capstone.project.Bean.Restaurant;
 import com.capstone.project.Bean.RestaurantTable;
 import com.capstone.project.Repo.RestaurantRepository;
 import com.capstone.project.Repo.RestaurantTableRepository;
-import jdk.internal.net.http.ResponseTimerEvent;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.PublicKey;
 import java.util.List;
 
 @RestController
