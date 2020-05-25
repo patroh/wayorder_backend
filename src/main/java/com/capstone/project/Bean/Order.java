@@ -26,5 +26,8 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @OneToOne
+    private User user;
+
     private Float total;
 }

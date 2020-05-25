@@ -49,15 +49,6 @@ public class RestaurantTableController {
             returnData.setMessage("Table with the same number already exists");
         }
 
-
-
-        Pusher pusher = new Pusher("1007277", "c69534542eb0facedf5e", "f3b73632e4bb5b14f2b7");
-        pusher.setCluster("us2");
-        pusher.setEncrypted(true);
-
-        pusher.trigger("my-channel", "my-event", returnData);
-
-
         return returnData;
     }
 

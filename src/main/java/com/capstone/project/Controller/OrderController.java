@@ -33,7 +33,7 @@ public class OrderController {
             total += (o.getQuantity() * o.getDish().getPrice());
         }
         Restaurant restaurant = restaurantRepo.findById(id).get();
-        Order newOrder = Order.builder().restaurant(restaurant).orderItems(items).total(total).build();
+        Order newOrder = Order.builder().restaurant(restaurant).user(user).orderItems(items).total(total).build();
 
         Order placedOrder = orderRepository.save(newOrder);
         user.getOrders().add(placedOrder);
