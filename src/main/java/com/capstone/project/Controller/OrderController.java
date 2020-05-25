@@ -1,5 +1,6 @@
 package com.capstone.project.Controller;
 
+import com.capstone.project.Bean.Holders.ReturnData;
 import com.capstone.project.Bean.Order;
 import com.capstone.project.Bean.OrderItem;
 import com.capstone.project.Bean.Restaurant;
@@ -36,16 +37,26 @@ public class OrderController {
         Order newOrder = Order.builder().restaurant(restaurant).user(user).orderItems(items).total(total).build();
 
         Order placedOrder = orderRepository.save(newOrder);
-        user.getOrders().add(placedOrder);
-        userRepository.save(user);
         return placedOrder;
     }
 
 
+    //Get all orders of the restaurant
+    @CrossOrigin("*")
+    @GetMapping("/restaurant/{id}")
+    public ReturnData getAllOrderOfRestaurant(@PathVariable("id") Long id){
+        ReturnData returnData = new ReturnData();
+        List<Order> allOrders = orderRepository.findByRestaurant_Id(id);
+        returnData.setCode(0);
+        returnData.setMessage("All orders retrived");
+        returnData.setObject(allOrders);
+        return returnData;
+    }
+
     // Get all orders placed by a particular user
     @PostMapping("/{uid}")
     public List<Order> findOrdersByUser(@PathVariable Long uid) {
-        return userRepository.findById(uid).get().getOrders();
+        return orderRepository.findByUser_Id(uid);
     }
 
 

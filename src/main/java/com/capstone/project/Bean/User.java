@@ -29,7 +29,4 @@ public class User {
     @NotNull
     private String password;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<Order> orders;
-
 }
