@@ -5,6 +5,7 @@ import com.capstone.project.Bean.Restaurant;
 import com.capstone.project.Bean.RestaurantTable;
 import com.capstone.project.Repo.RestaurantRepository;
 import com.capstone.project.Repo.RestaurantTableRepository;
+import com.pusher.rest.Pusher;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -47,6 +48,15 @@ public class RestaurantTableController {
             returnData.setCode(1);
             returnData.setMessage("Table with the same number already exists");
         }
+
+
+
+        Pusher pusher = new Pusher("1007277", "c69534542eb0facedf5e", "f3b73632e4bb5b14f2b7");
+        pusher.setCluster("us2");
+        pusher.setEncrypted(true);
+
+        pusher.trigger("my-channel", "my-event", returnData);
+
 
         return returnData;
     }
