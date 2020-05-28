@@ -9,6 +9,7 @@ import com.capstone.project.Repo.OrderItemRepository;
 import com.capstone.project.Repo.OrderRepository;
 import com.capstone.project.Repo.RestaurantRepository;
 import com.capstone.project.Repo.UserRepository;
+import com.pusher.rest.Pusher;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class OrderController {
     private OrderRepository orderRepository;
     private OrderItemRepository orderItemRepository;
     private UserRepository userRepository;
+    private Pusher pusher = new Pusher("1009241", "a15e9f068cfceb6d6e26", "b1529b200107a0afcbcd");
 
 
     //Makes an order from the items , save to repository and return the saved order
@@ -37,6 +39,11 @@ public class OrderController {
         Order newOrder = Order.builder().restaurant(restaurant).user(user).orderItems(items).total(total).build();
 
         Order placedOrder = orderRepository.save(newOrder);
+
+        pusher.setCluster("us2");
+        pusher.setEncrypted(true);
+
+        pusher.trigger("restaurant-channel"+id, "orderPlaced", placedOrder);
         return placedOrder;
     }
 
