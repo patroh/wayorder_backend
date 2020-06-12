@@ -28,6 +28,34 @@ public class RestaurantTableController {
         return returnData;
     }
 
+    //Get a particular table info
+    @GetMapping("/{tid}")
+    public ReturnData getTableInfo(@PathVariable("id") Long id, @PathVariable("tid") Long tid){
+        ReturnData returnData = new ReturnData();
+        Restaurant foundRestaurant = new Restaurant();
+        try {
+             foundRestaurant = restaurantRepository.findById(id).get();
+        }catch (Exception e){
+            returnData.setCode(1);
+            returnData.setMessage("Restaurant Not Found");
+            return returnData;
+        }
+        List<RestaurantTable> allTables = foundRestaurant.getTables();
+
+        for(RestaurantTable t : allTables){
+            if(t.getId() == tid){
+                returnData.setCode(0);
+                returnData.setMessage("Table details fetched");
+                returnData.setObject(t);
+                return returnData;
+            }
+        }
+
+        returnData.setCode(1);
+        returnData.setMessage("Table not found");
+        return returnData;
+    }
+
 
     // Add new table to restaurant
     @CrossOrigin(origins = "*")
