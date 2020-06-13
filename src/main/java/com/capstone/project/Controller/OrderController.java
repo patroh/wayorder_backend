@@ -26,7 +26,7 @@ public class OrderController {
 
 
 
-    //Makes an order from the items , save to repository and return the saved order
+    //Makes an order from the items , save to repository and return the saved order.
     @PostMapping(value = "/{id}/{uid}", produces = "application/json")
     public Order makeOrder(@RequestBody List<OrderItem> items, @PathVariable Long id, @PathVariable Long uid) {
         Pusher pusher = new Pusher("1009241", "a15e9f068cfceb6d6e26", "b1529b200107a0afcbcd");
