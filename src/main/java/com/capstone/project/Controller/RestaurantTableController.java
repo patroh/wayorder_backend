@@ -62,11 +62,20 @@ public class RestaurantTableController {
     @PutMapping(value = "" , consumes = "application/json")
     public ReturnData addNewTable(@PathVariable("id") Long id, @RequestBody RestaurantTable table){
         ReturnData returnData = new ReturnData();
-        RestaurantTable foundTable = tableRepository.findByNumber(table.getNumber());
+        Restaurant foundRestaurant = restaurantRepository.findById(id).get();
+        RestaurantTable foundTable = null;
+
+        List<RestaurantTable> tableList = foundRestaurant.getTables();
+
+        for(RestaurantTable t:tableList){
+            if(t.getNumber() == table.getNumber()){
+                foundTable = t;
+                break;
+            }
+        }
 
         if(foundTable == null){
             RestaurantTable savedTable = tableRepository.save(table);
-            Restaurant foundRestaurant = restaurantRepository.findById(id).get();
             foundRestaurant.getTables().add(savedTable);
             restaurantRepository.save(foundRestaurant);
             returnData.setCode(0);
