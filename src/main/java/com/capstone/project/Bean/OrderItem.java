@@ -20,5 +20,8 @@ public class OrderItem {
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Dish dish;
 
+    @Lob
+    private String note;
+
     private Integer quantity;
 }
