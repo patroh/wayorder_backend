@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -28,5 +29,8 @@ public class User {
     // Password encoded by Base64 encoder
     @NotNull
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private  List<PaymentMethod> savedPaymentMethods = new ArrayList<>();
 
 }

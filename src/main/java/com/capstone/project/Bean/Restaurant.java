@@ -25,6 +25,8 @@ public class Restaurant {
     private String city;
     private String postal;
     private String phone;
+    private boolean dinein;
+    private boolean takeout;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Dish> dishes = new ArrayList<>();
