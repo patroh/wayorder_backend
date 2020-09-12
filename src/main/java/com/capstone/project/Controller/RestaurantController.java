@@ -223,6 +223,19 @@ public class RestaurantController {
         return returnData;
     }
 
+    //Upload restaurant logo
+    @CrossOrigin(origins = "*")
+    @PutMapping(value = "/{id}/logo")
+    public ReturnData uploadRestaurantLogo(@PathVariable("id") Long restaurantId,@RequestParam String logoUrl){
+        ReturnData returnData = new ReturnData();
+        Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
+        foundRestaurant.setLogo(logoUrl);
+        Restaurant savedRestaurant = restaurantRepo.save(foundRestaurant);
+        returnData.setMessage("Logo Uploaded Successfully");
+        returnData.setCode(0);
+        returnData.setObject(savedRestaurant);
+        return returnData;
+    }
 
     //Return list of all restaurant, to be removed in production
     @GetMapping("/displayAll")
