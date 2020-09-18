@@ -240,7 +240,7 @@ public class RestaurantController {
 
     //Upload restaurant back image
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/{id}/logo")
+    @PutMapping(value = "/{id}/backimage")
     public ReturnData uploadRestaurantBackImage(@PathVariable("id") Long restaurantId,@RequestParam String imageUrl,@RequestParam String token){
         imageUrl+="&token="+token;
         ReturnData returnData = new ReturnData();
