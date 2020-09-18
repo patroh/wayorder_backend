@@ -227,7 +227,7 @@ public class RestaurantController {
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{id}/logo")
     public ReturnData uploadRestaurantLogo(@PathVariable("id") Long restaurantId,@RequestParam String logoUrl,@RequestParam String token){
-        logoUrl+="&"+token;
+        logoUrl+="&token="+token;
         ReturnData returnData = new ReturnData();
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
         foundRestaurant.setLogo(logoUrl);
