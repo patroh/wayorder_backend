@@ -238,6 +238,21 @@ public class RestaurantController {
         return returnData;
     }
 
+    //Upload restaurant back image
+    @CrossOrigin(origins = "*")
+    @PutMapping(value = "/{id}/logo")
+    public ReturnData uploadRestaurantBackImage(@PathVariable("id") Long restaurantId,@RequestParam String imageUrl,@RequestParam String token){
+        imageUrl+="&token="+token;
+        ReturnData returnData = new ReturnData();
+        Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
+        foundRestaurant.setBackImage(imageUrl);
+        Restaurant savedRestaurant = restaurantRepo.save(foundRestaurant);
+        returnData.setMessage("Back Image Uploaded Successfully");
+        returnData.setCode(0);
+        returnData.setObject(savedRestaurant);
+        return returnData;
+    }
+
     //Return list of all restaurant, to be removed in production
     @GetMapping("/displayAll")
     public List<Restaurant> dislayAllRestaurant() {
