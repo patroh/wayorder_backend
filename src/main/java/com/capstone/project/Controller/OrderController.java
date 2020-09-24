@@ -31,13 +31,16 @@ public class OrderController {
     public Order makeOrder(@RequestBody List<OrderItem> items, @PathVariable Long id, @PathVariable Long uid) {
         Pusher pusher = new Pusher("1009241", "a15e9f068cfceb6d6e26", "b1529b200107a0afcbcd");
         float total = 0;
+        float tax = 0;
         User user = userRepository.findById(uid).get();
         List<OrderItem> savedItems = orderItemRepository.saveAll(items);
         for (OrderItem o : savedItems) {
             total += (o.getQuantity() * o.getDish().getPrice());
+            tax+= (o.getQuantity() * o.getDish().getTax());
         }
         Restaurant restaurant = restaurantRepo.findById(id).get();
-        Order newOrder = Order.builder().restaurant(restaurant).user(user).orderItems(items).total(total).build();
+        Order newOrder = Order.builder().restaurant(restaurant).user(user).
+                orderItems(items).total(total).tax(tax).build();
 
         Order placedOrder = orderRepository.save(newOrder);
 

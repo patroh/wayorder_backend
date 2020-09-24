@@ -30,5 +30,7 @@ public class Order {
     @OneToOne
     private User user;
 
+    private Float tax;
+
     private Float total;
 }
