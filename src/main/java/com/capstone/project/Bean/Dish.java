@@ -26,5 +26,5 @@ public class Dish {
     private Float star;
     private Integer reviews;
     private Integer likes;
-    private String image;
+    private String image = "https://png.pngtree.com/png-vector/20190318/ourlarge/pngtree-junk-food-seamless-pattern-doodle-drawing-style-line-art-hand-png-image_858333.jpg";
 }
