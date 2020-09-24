@@ -35,8 +35,11 @@ public class OrderController {
         User user = userRepository.findById(uid).get();
         List<OrderItem> savedItems = orderItemRepository.saveAll(items);
         for (OrderItem o : savedItems) {
-            total += (o.getQuantity() * o.getDish().getPrice());
-            tax+= (o.getQuantity() * o.getDish().getTax());
+            float quantity = o.getQuantity();
+            float dishPrice = o.getDish().getPrice();
+            float dishTax = o.getDish().getTax();
+            total += (quantity * dishPrice);
+            tax+= (quantity * ((dishPrice*tax)/100));
         }
         Restaurant restaurant = restaurantRepo.findById(id).get();
         Order newOrder = Order.builder().restaurant(restaurant).user(user).
