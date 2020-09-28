@@ -16,11 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 public class RestaurantController {
 
-    private RestaurantRepository restaurantRepo;
-    private RestaurantUserRepository restaurantUserRepository;
-    private MenuRepository menuRepository;
-    private CategoryRepository categoryRepository;
-    private DishRepository dishRepository;
+    private final RestaurantRepository restaurantRepo;
+    private final RestaurantUserRepository restaurantUserRepository;
+    private final MenuRepository menuRepository;
+    private final CategoryRepository categoryRepository;
+    private final DishRepository dishRepository;
 
 
     //Return the restaurant object
@@ -124,7 +124,7 @@ public class RestaurantController {
     //Add new menu item
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{id}/menu/item", consumes = "application/json")
-    public ReturnData addMenuItem(@PathVariable("id") Long restaurantId,@RequestParam Long categoryId,@RequestBody Dish dish){
+    public ReturnData addMenuItem(@PathVariable("id") Long restaurantId, @RequestParam Long categoryId, @RequestBody Dish dish) {
 
         Dish addedDish = dishRepository.save(dish);
         Category foundCategory = categoryRepository.findById(categoryId).get();
@@ -145,8 +145,8 @@ public class RestaurantController {
 
     //Edit menu item
     @CrossOrigin(origins = "*")
-    @PostMapping(value = "/{id}/menu/item",consumes = "application/json")
-    public ReturnData editMenuItem(@PathVariable("id") Long restaurantId,@RequestParam Long fromCategoryId,@RequestParam Long categoryId,@RequestBody Dish dish){
+    @PostMapping(value = "/{id}/menu/item", consumes = "application/json")
+    public ReturnData editMenuItem(@PathVariable("id") Long restaurantId, @RequestParam Long fromCategoryId, @RequestParam Long categoryId, @RequestBody Dish dish) {
 
         Dish foundDish = dishRepository.findById(dish.getId()).get();
         foundDish.setName(dish.getName());
@@ -156,15 +156,15 @@ public class RestaurantController {
         foundDish.setImage(dish.getImage());
 
         Dish editedDish = dishRepository.save(foundDish);
-        if(fromCategoryId != categoryId) {
+        if (fromCategoryId != categoryId) {
             // Edit the item properties and also change the category
 
             // Delete the item reference from the current category
-            Category foundCategory  = categoryRepository.findById(fromCategoryId).get();
+            Category foundCategory = categoryRepository.findById(fromCategoryId).get();
             List<Dish> foundDishesInCategory = foundCategory.getDishes();
 
-            for(int i=0 ; i<foundDishesInCategory.size() ; i++){
-                if(foundDishesInCategory.get(i).getId() == editedDish.getId()){
+            for (int i = 0; i < foundDishesInCategory.size(); i++) {
+                if (foundDishesInCategory.get(i).getId() == editedDish.getId()) {
                     foundDishesInCategory.remove(i);
                     break;
                 }
@@ -186,16 +186,17 @@ public class RestaurantController {
         returnData.setObject(editedDish);
         return returnData;
     }
+
     //Delete menu item
     @CrossOrigin(origins = "*")
     @DeleteMapping(value = "/{id}/menu/item")
-    public ReturnData deleteMenuItem(@PathVariable("id") Long restaurantId,@RequestParam Long categoryId,@RequestParam Long dishId){
+    public ReturnData deleteMenuItem(@PathVariable("id") Long restaurantId, @RequestParam Long categoryId, @RequestParam Long dishId) {
 
-        Category foundCategory  = categoryRepository.findById(categoryId).get();
+        Category foundCategory = categoryRepository.findById(categoryId).get();
         List<Dish> foundDishesInCategory = foundCategory.getDishes();
 
-        for(int i=0 ; i<foundDishesInCategory.size() ; i++){
-            if(foundDishesInCategory.get(i).getId() == dishId){
+        for (int i = 0; i < foundDishesInCategory.size(); i++) {
+            if (foundDishesInCategory.get(i).getId() == dishId) {
                 foundDishesInCategory.remove(i);
                 break;
             }
@@ -208,13 +209,13 @@ public class RestaurantController {
         ReturnData returnData = new ReturnData();
         returnData.setCode(0);
         returnData.setMessage("Item deleted successfully");
-        return  returnData;
+        return returnData;
     }
 
     //Get menu of the restaurant
     @CrossOrigin(origins = "*")
     @GetMapping(value = "/{id}/menu")
-    public ReturnData getRestaurantMenu(@PathVariable("id") Long restaurantId){
+    public ReturnData getRestaurantMenu(@PathVariable("id") Long restaurantId) {
 
         ReturnData returnData = new ReturnData();
         returnData.setMessage("Menu fetched successfully");
@@ -226,8 +227,8 @@ public class RestaurantController {
     //Upload restaurant logo
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{id}/logo")
-    public ReturnData uploadRestaurantLogo(@PathVariable("id") Long restaurantId,@RequestParam String logoUrl,@RequestParam String token){
-        logoUrl+="&token="+token;
+    public ReturnData uploadRestaurantLogo(@PathVariable("id") Long restaurantId, @RequestParam String logoUrl, @RequestParam String token) {
+        logoUrl += "&token=" + token;
         ReturnData returnData = new ReturnData();
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
         foundRestaurant.setLogo(logoUrl);
@@ -241,8 +242,8 @@ public class RestaurantController {
     //Upload restaurant back image
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{id}/bgImg")
-    public ReturnData uploadRestaurantBackImage(@PathVariable("id") Long restaurantId,@RequestParam String bgImgUrl,@RequestParam String token){
-        bgImgUrl+="&token="+token;
+    public ReturnData uploadRestaurantBackImage(@PathVariable("id") Long restaurantId, @RequestParam String bgImgUrl, @RequestParam String token) {
+        bgImgUrl += "&token=" + token;
         ReturnData returnData = new ReturnData();
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
         foundRestaurant.setBgImg(bgImgUrl);

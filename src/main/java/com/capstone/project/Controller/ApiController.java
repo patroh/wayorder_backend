@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api")
 @AllArgsConstructor
 public class ApiController {
-    private EmailNewsletterRepository emailNewsletterRepository;
+    private final EmailNewsletterRepository emailNewsletterRepository;
 
 
     @GetMapping("/emailNewsletters")

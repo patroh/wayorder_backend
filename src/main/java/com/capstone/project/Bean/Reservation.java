@@ -30,5 +30,4 @@ public class Reservation {
     private List<SeatingArrangement> seatingArrangement;
 
 
-
 }

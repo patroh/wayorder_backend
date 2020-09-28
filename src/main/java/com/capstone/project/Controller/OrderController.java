@@ -19,11 +19,10 @@ import java.util.List;
 @RequestMapping("/order")
 @AllArgsConstructor
 public class OrderController {
-    private RestaurantRepository restaurantRepo;
-    private OrderRepository orderRepository;
-    private OrderItemRepository orderItemRepository;
-    private UserRepository userRepository;
-
+    private final RestaurantRepository restaurantRepo;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final UserRepository userRepository;
 
 
     //Makes an order from the items , save to repository and return the saved order.
@@ -39,7 +38,7 @@ public class OrderController {
             float dishPrice = o.getDish().getPrice();
             float dishTax = o.getDish().getTax();
             total += (quantity * dishPrice);
-            tax+= (quantity * ((dishPrice*tax)/100));
+            tax += (quantity * ((dishPrice * tax) / 100));
         }
         Restaurant restaurant = restaurantRepo.findById(id).get();
         Order newOrder = Order.builder().restaurant(restaurant).user(user).
@@ -50,7 +49,7 @@ public class OrderController {
         pusher.setCluster("us2");
         pusher.setEncrypted(true);
 
-        pusher.trigger("restaurant-channel"+id, "orderPlaced", placedOrder);
+        pusher.trigger("restaurant-channel" + id, "orderPlaced", placedOrder);
         return placedOrder;
     }
 
@@ -58,7 +57,7 @@ public class OrderController {
     //Get all orders of the restaurant
     @CrossOrigin("*")
     @GetMapping("/restaurant/{id}")
-    public ReturnData getAllOrderOfRestaurant(@PathVariable("id") Long id){
+    public ReturnData getAllOrderOfRestaurant(@PathVariable("id") Long id) {
         ReturnData returnData = new ReturnData();
         List<Order> allOrders = orderRepository.findByRestaurant_Id(id);
         returnData.setCode(0);

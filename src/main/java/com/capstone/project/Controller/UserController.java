@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping("/user")
 @AllArgsConstructor
 public class UserController {
-    private UserRepository userRepository;
-    private RestaurantUserRepository restaurantUserRepository;
+    private final UserRepository userRepository;
+    private final RestaurantUserRepository restaurantUserRepository;
 
     // Register customer user in database by checking if it already exist or not
     @PutMapping(value = "/register", consumes = "application/json")

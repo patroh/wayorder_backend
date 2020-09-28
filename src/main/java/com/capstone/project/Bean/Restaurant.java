@@ -20,8 +20,8 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String logo;
-    private String bgImg = "https://simply-delicious-food.com/wp-content/uploads/2019/04/greek-chicken-salad-4.jpg";
+    private String logo = "https://images.all-free-download.com/images/graphicthumb/vector_food_pattern_241247.jpg";
+    private String bgImg = "https://images.unsplash.com/photo-1505826759037-406b40feb4cd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80";
     private Long unit;
     private String street;
     private String city;

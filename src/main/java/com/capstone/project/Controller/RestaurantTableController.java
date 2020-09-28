@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/restaurant/{id}/table")
 @AllArgsConstructor
 public class RestaurantTableController {
-    private RestaurantRepository restaurantRepository;
-    private RestaurantTableRepository tableRepository;
-    private ReservationRepository reservationRepository;
-    private TimeSlotRepository timeSlotRepository;
-    private UserRepository userRepository;
-    private SeatingArrangementRepository seatingArrangementRepository;
+    private final RestaurantRepository restaurantRepository;
+    private final RestaurantTableRepository tableRepository;
+    private final ReservationRepository reservationRepository;
+    private final TimeSlotRepository timeSlotRepository;
+    private final UserRepository userRepository;
+    private final SeatingArrangementRepository seatingArrangementRepository;
 
     // Get all tables of restaurant
     @GetMapping("")
@@ -124,7 +124,7 @@ public class RestaurantTableController {
 
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{uid}/book/{partySize}")
-    public ReturnData bookTable(@PathVariable("id") Long id,@PathVariable("uid") Long uid, @PathVariable("partySize") Integer partySize, @RequestBody TimeSlot timeSlot) {
+    public ReturnData bookTable(@PathVariable("id") Long id, @PathVariable("uid") Long uid, @PathVariable("partySize") Integer partySize, @RequestBody TimeSlot timeSlot) {
         ReturnData returnData = new ReturnData();
 
         Restaurant restaurant = restaurantRepository.findById(id).get();
@@ -150,14 +150,14 @@ public class RestaurantTableController {
                         restaurantTables, timeSlot, partySize
                 );
 
-                returnData.setObject(makeFinalReservation(assignedTables,userRepository.findById(uid).get()));
+                returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
 
             } else {
                 // Join the tables
                 List<SeatingArrangement> assignedTables = joinTables(
                         restaurantTables, timeSlot, partySize
                 );
-                returnData.setObject(makeFinalReservation(assignedTables,userRepository.findById(uid).get()));
+                returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
             }
 
         } else {
@@ -171,7 +171,7 @@ public class RestaurantTableController {
             List<SeatingArrangement> assignedTables = joinTables(
                     availableTables, timeSlot, partySize
             );
-            returnData.setObject(makeFinalReservation(assignedTables,userRepository.findById(uid).get()));
+            returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
 
         }
 
@@ -183,13 +183,9 @@ public class RestaurantTableController {
         return tableList.stream().filter(t -> t.getCapacity() >= partySize).collect(Collectors.toList());
     }
 
-    ;
-
     private List<RestaurantTable> getTablesLessThenPartySize(List<RestaurantTable> tableList, Integer partySize) {
         return tableList.stream().filter(t -> t.getCapacity() < partySize).collect(Collectors.toList());
     }
-
-    ;
 
     private SeatingArrangement makeNewBooking(TimeSlot timeSlot, RestaurantTable table, Integer partySize) {
         SeatingArrangement seating = new SeatingArrangement();
@@ -199,7 +195,7 @@ public class RestaurantTableController {
         return seating;
     }
 
-    private Reservation makeFinalReservation(List<SeatingArrangement> seating,User user){
+    private Reservation makeFinalReservation(List<SeatingArrangement> seating, User user) {
         List<SeatingArrangement> savedSeatings = seatingArrangementRepository.saveAll(seating);
         Reservation newReservation = new Reservation();
         newReservation.setDate(LocalDate.now());
@@ -209,6 +205,7 @@ public class RestaurantTableController {
 
         return reservationRepository.save(newReservation);
     }
+
     private List<SeatingArrangement> joinTables(List<RestaurantTable> availableTables, TimeSlot timeSlot, Integer partySize) {
         List<SeatingArrangement> holdSeating = new ArrayList<>();
         List<RestaurantTable> tablesLessThanPartySize = getTablesLessThenPartySize(availableTables, partySize);

@@ -31,6 +31,6 @@ public class User {
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private  List<PaymentMethod> savedPaymentMethods = new ArrayList<>();
+    private List<PaymentMethod> savedPaymentMethods = new ArrayList<>();
 
 }

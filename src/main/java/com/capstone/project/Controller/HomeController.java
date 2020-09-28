@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @AllArgsConstructor
 public class HomeController {
-    private EmailNewsletterRepository emailNewsletterRepository;
+    private final EmailNewsletterRepository emailNewsletterRepository;
 
     @GetMapping("/")
     public String index(Model model) {
