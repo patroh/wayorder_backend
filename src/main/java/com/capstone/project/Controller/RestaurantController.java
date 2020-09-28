@@ -240,12 +240,12 @@ public class RestaurantController {
 
     //Upload restaurant back image
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/{id}/backimage")
-    public ReturnData uploadRestaurantBackImage(@PathVariable("id") Long restaurantId,@RequestParam String imageUrl,@RequestParam String token){
-        imageUrl+="&token="+token;
+    @PutMapping(value = "/{id}/bgImg")
+    public ReturnData uploadRestaurantBackImage(@PathVariable("id") Long restaurantId,@RequestParam String bgImgUrl,@RequestParam String token){
+        bgImgUrl+="&token="+token;
         ReturnData returnData = new ReturnData();
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
-        foundRestaurant.setBackImage(imageUrl);
+        foundRestaurant.setBgImg(bgImgUrl);
         Restaurant savedRestaurant = restaurantRepo.save(foundRestaurant);
         returnData.setMessage("Back Image Uploaded Successfully");
         returnData.setCode(0);

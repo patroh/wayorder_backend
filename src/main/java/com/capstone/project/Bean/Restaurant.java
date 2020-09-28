@@ -21,7 +21,7 @@ public class Restaurant {
     private Long id;
     private String name;
     private String logo;
-    private String backImage = "https://simply-delicious-food.com/wp-content/uploads/2019/04/greek-chicken-salad-4.jpg";
+    private String bgImg = "https://simply-delicious-food.com/wp-content/uploads/2019/04/greek-chicken-salad-4.jpg";
     private Long unit;
     private String street;
     private String city;
