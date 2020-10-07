@@ -38,7 +38,7 @@ public class OrderController {
             float dishPrice = o.getDish().getPrice();
             float dishTax = o.getDish().getTax();
             total += (quantity * dishPrice);
-            tax += (quantity * ((dishPrice * tax) / 100));
+            tax += (quantity * ((dishPrice * dishTax) / 100));
         }
         Restaurant restaurant = restaurantRepo.findById(id).get();
         Order newOrder = Order.builder().restaurant(restaurant).user(user).
