@@ -310,7 +310,7 @@ public class RestaurantController {
         List<BusinessHours> defaultHours = new ArrayList<>();
         for(int i=0;i<7 ;i++){
             BusinessHours newTime = BusinessHours.builder().dayOfWeek(DayOfWeek.values()[i])
-                    .startTime(LocalTime.NOON).endTime(LocalTime.MIDNIGHT).build();
+                    .startTime(LocalTime.NOON).endTime(LocalTime.MIDNIGHT.minusMinutes(2)).build();
             defaultHours.add(newTime);
         }
         return businessHoursRepository.saveAll(defaultHours);
@@ -320,17 +320,18 @@ public class RestaurantController {
     private List<TimeSlotForDay> generateDefaultTimeSlots(){
         List<TimeSlotForDay> defaultTimeSlots = new ArrayList<>();
         final LocalTime startTime = LocalTime.NOON;
-        final LocalTime endTime = LocalTime.MIDNIGHT;
+        final LocalTime endTime = LocalTime.MIDNIGHT.minusMinutes(2);
 
         for(int i = 0;i<7 ;i++){
             List<TimeSlot> listOfSlotForTheDay = new ArrayList<>();
+            LocalTime startTimeCpy = startTime.plusMinutes(45);
+            LocalTime endTimeCpy = startTimeCpy.plusMinutes(45);
             while (true) {
-                LocalTime startTimeCpy = startTime.plusMinutes(45);
-                LocalTime endTimeCpy = startTimeCpy.plusMinutes(45);
-
                 if (endTimeCpy.isBefore(endTime)) {
                     TimeSlot newSlot = TimeSlot.builder().time(startTimeCpy).build();
                     listOfSlotForTheDay.add(newSlot);
+                    startTimeCpy = startTimeCpy.plusMinutes(45);
+                    endTimeCpy = startTimeCpy.plusMinutes(45);
                 } else {
                 /* Current time slot will end after the restaurant is closed so we
                  cannot considered this time slot */
