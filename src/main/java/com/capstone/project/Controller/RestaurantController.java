@@ -340,7 +340,7 @@ public class RestaurantController {
                     break;
                 }
             }
-            TimeSlotForDay timeSlotForDay = new TimeSlotForDay().builder().timeSlots(
+            TimeSlotForDay timeSlotForDay = TimeSlotForDay.builder().timeSlots(
                     timeSlotRepository.saveAll(listOfSlotForTheDay)
             )
                     .dayOfWeek(DayOfWeek.values()[i]).build();
