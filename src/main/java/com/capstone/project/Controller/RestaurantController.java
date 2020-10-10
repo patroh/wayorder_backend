@@ -329,7 +329,7 @@ public class RestaurantController {
             LocalTime startTimeCpy = startTime.plusMinutes(45);
             LocalTime endTimeCpy = startTimeCpy.plusMinutes(45);
             while (true) {
-                if (endTimeCpy.isBefore(endTime)) {
+                if (endTimeCpy.isBefore(endTime) && endTimeCpy.isAfter(startTime)) {
                     TimeSlot newSlot = TimeSlot.builder().time(startTimeCpy).build();
                     listOfSlotForTheDay.add(newSlot);
                     startTimeCpy = startTimeCpy.plusMinutes(45);
