@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Inheritance
 @Table(name = "order_table")
 public class Order {
     @Id
@@ -26,6 +25,12 @@ public class Order {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    @OneToOne
+    private TakeoutOrder isTakeOutOrder;
+
+    @OneToOne
+    private InRestaurantOrder isInRestaurantOrder;
 
     @OneToOne
     private User user;

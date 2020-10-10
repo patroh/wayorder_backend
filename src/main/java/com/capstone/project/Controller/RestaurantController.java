@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import net.bytebuddy.asm.Advice;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +24,9 @@ public class RestaurantController {
     private final MenuRepository menuRepository;
     private final CategoryRepository categoryRepository;
     private final DishRepository dishRepository;
+    private final BusinessHoursRepository businessHoursRepository;
+    private final TimeSlotRepository timeSlotRepository;
+    private final TimeSlotForDayRepository timeSlotForDayRepository;
 
 
     //Return the restaurant object
@@ -48,6 +54,8 @@ public class RestaurantController {
             if (foundRestaurantUser == null) {
                 Menu emptyMenu = menuRepository.save(new Menu());
                 resObj.setMenu(emptyMenu);
+                resObj.setBusinessHours(generateDefaultBusinessHours());
+                resObj.setBookingTimeSlots(generateDefaultTimeSlots());
                 Restaurant savedRestaurant = restaurantRepo.save(resObj);
                 resUserObj.setRestaurant(savedRestaurant);
                 foundRestaurantUser = restaurantUserRepository.save(resUserObj);
@@ -254,11 +262,86 @@ public class RestaurantController {
         return returnData;
     }
 
+    //Modify isDineIn paramater of restaurant
+    @CrossOrigin(origins = "*")
+    @PutMapping(value = "/{id}/isDineIn/{isDineIn}", consumes = "application/json")
+    public ReturnData modifyIsDineIn(@PathVariable("id") Long restaurantId,@RequestParam boolean isDineIn){
+        ReturnData returnData = new ReturnData();
+        Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
+        foundRestaurant.setDineIn(isDineIn);
+        restaurantRepo.save(foundRestaurant);
+        returnData.setMessage("Restaurant can now accept Dine In Orders");
+        returnData.setCode(0);
+        return returnData;
+    }
+
+    //Modify isTakeout paramater of restaurant
+    @CrossOrigin(origins = "*")
+    @PutMapping(value = "/{id}/isTakeout/{isTakeout}", consumes = "application/json")
+    public ReturnData modifyIsTakeout(@PathVariable("id") Long restaurantId,@RequestParam boolean isTakeout){
+        ReturnData returnData = new ReturnData();
+        Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
+        foundRestaurant.setDineIn(isTakeout);
+        restaurantRepo.save(foundRestaurant);
+        returnData.setMessage("Restaurant can now accept Takeout Orders");
+        returnData.setCode(0);
+        return returnData;
+    }
+
     //Return list of all restaurant, to be removed in production
     @GetMapping("/displayAll")
     public List<Restaurant> dislayAllRestaurant() {
         return restaurantRepo.findAll();
     }
 
+    //Edit Restaurant business hours
+    @CrossOrigin(origins = "*")
+    @PutMapping(value = "/{id}/businessHours")
+    public ReturnData editBusinessHours(@PathVariable("id") Long restaurantId,@RequestBody List<TimeSlotForDay> timeSlotsForDay){
+        ReturnData returnData = new ReturnData();
 
+        timeSlotForDayRepository.saveAll(timeSlotsForDay);
+
+        return returnData;
+    }
+
+    // Generate default hours for restaurant NOON to MIDNIGHT
+    private List<BusinessHours> generateDefaultBusinessHours(){
+        List<BusinessHours> defaultHours = new ArrayList<>();
+        for(int i=0;i<7 ;i++){
+            BusinessHours newTime = BusinessHours.builder().dayOfWeek(DayOfWeek.values()[i])
+                    .startTime(LocalTime.NOON).endTime(LocalTime.MIDNIGHT).build();
+            defaultHours.add(newTime);
+        }
+        return businessHoursRepository.saveAll(defaultHours);
+    };
+
+    // Generate default timeSlots for the restaurant
+    private List<TimeSlotForDay> generateDefaultTimeSlots(){
+        List<TimeSlotForDay> defaultTimeSlots = new ArrayList<>();
+        final LocalTime startTime = LocalTime.NOON;
+        final LocalTime endTime = LocalTime.MIDNIGHT;
+
+        for(int i = 0;i<7 ;i++){
+            List<TimeSlot> listOfSlotForTheDay = new ArrayList<>();
+            while (true) {
+                LocalTime startTimeCpy = startTime.plusMinutes(45);
+                LocalTime endTimeCpy = startTimeCpy.plusMinutes(45);
+
+                if (endTimeCpy.isBefore(endTime)) {
+                    TimeSlot newSlot = TimeSlot.builder().time(startTimeCpy).build();
+                    listOfSlotForTheDay.add(newSlot);
+                } else {
+                /* Current time slot will end after the restaurant is closed so we
+                 cannot considered this time slot */
+                    break;
+                }
+            }
+            TimeSlotForDay timeSlotForDay = new TimeSlotForDay().builder().timeSlots(listOfSlotForTheDay)
+                    .dayOfWeek(DayOfWeek.values()[i]).build();
+            defaultTimeSlots.add(timeSlotForDay);
+        }
+
+        return timeSlotForDayRepository.saveAll(defaultTimeSlots);
+    };
 }

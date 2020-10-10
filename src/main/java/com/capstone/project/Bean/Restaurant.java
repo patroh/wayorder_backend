@@ -27,8 +27,8 @@ public class Restaurant {
     private String city;
     private String postal;
     private String phone;
-    private boolean dinein;
-    private boolean takeout;
+    private boolean isDineIn;
+    private boolean isTakeout = true;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Dish> dishes = new ArrayList<>();
@@ -38,4 +38,10 @@ public class Restaurant {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<RestaurantTable> tables = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<BusinessHours> businessHours = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<TimeSlotForDay> bookingTimeSlots = new ArrayList<>();
 }

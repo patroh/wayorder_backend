@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,20 +15,13 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Builder
-public class Reservation {
+public class TimeSlotForDay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate date;
-
-    private LocalTime time;
-
-    @OneToOne
-    private User user;
+    private DayOfWeek dayOfWeek;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<SeatingArrangement> seatingArrangement;
-
-
+    private List<TimeSlot> timeSlots = new ArrayList<>();
 }

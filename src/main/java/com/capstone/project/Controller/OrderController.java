@@ -53,7 +53,6 @@ public class OrderController {
         return placedOrder;
     }
 
-
     //Get all orders of the restaurant
     @CrossOrigin("*")
     @GetMapping("/restaurant/{id}")
