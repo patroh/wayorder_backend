@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import net.bytebuddy.asm.Advice;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -265,7 +266,7 @@ public class RestaurantController {
     //Modify isDineIn paramater of restaurant
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{id}/isDineIn/{isDineIn}")
-    public ReturnData modifyIsDineIn(@PathVariable("id") Long restaurantId, @RequestParam boolean isDineIn) {
+    public ReturnData modifyIsDineIn(@PathVariable("id") Long restaurantId, @PathVariable("isDineIn") boolean isDineIn) {
         ReturnData returnData = new ReturnData();
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
         foundRestaurant.setDineIn(isDineIn);
@@ -278,7 +279,7 @@ public class RestaurantController {
     //Modify isTakeout paramater of restaurant
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{id}/isTakeout/{isTakeout}")
-    public ReturnData modifyIsTakeout(@PathVariable("id") Long restaurantId, @RequestParam boolean isTakeout) {
+    public ReturnData modifyIsTakeout(@PathVariable("id") Long restaurantId, @PathVariable("isTakeout") boolean isTakeout) {
         ReturnData returnData = new ReturnData();
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
         foundRestaurant.setTakeout(isTakeout);
