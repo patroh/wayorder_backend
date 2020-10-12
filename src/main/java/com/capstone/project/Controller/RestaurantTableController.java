@@ -123,7 +123,7 @@ public class RestaurantTableController {
 
 
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/{uid}/book/{partySize}")
+    @PutMapping(value = "/{uid}/book/{partySize}",consumes = "application/json")
     public ReturnData bookTable(@PathVariable("id") Long id, @PathVariable("uid") Long uid, @PathVariable("partySize") Integer partySize, @RequestBody TimeSlot timeSlot) {
         ReturnData returnData = new ReturnData();
 

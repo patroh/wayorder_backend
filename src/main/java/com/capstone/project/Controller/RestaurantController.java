@@ -264,7 +264,7 @@ public class RestaurantController {
 
     //Modify isDineIn paramater of restaurant
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/{id}/isDineIn/{isDineIn}", consumes = "application/json")
+    @PutMapping(value = "/{id}/isDineIn/{isDineIn}")
     public ReturnData modifyIsDineIn(@PathVariable("id") Long restaurantId, @RequestParam boolean isDineIn) {
         ReturnData returnData = new ReturnData();
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
@@ -277,11 +277,11 @@ public class RestaurantController {
 
     //Modify isTakeout paramater of restaurant
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/{id}/isTakeout/{isTakeout}", consumes = "application/json")
+    @PutMapping(value = "/{id}/isTakeout/{isTakeout}")
     public ReturnData modifyIsTakeout(@PathVariable("id") Long restaurantId, @RequestParam boolean isTakeout) {
         ReturnData returnData = new ReturnData();
         Restaurant foundRestaurant = restaurantRepo.findById(restaurantId).get();
-        foundRestaurant.setDineIn(isTakeout);
+        foundRestaurant.setTakeout(isTakeout);
         restaurantRepo.save(foundRestaurant);
         returnData.setMessage("Restaurant can now accept Takeout Orders");
         returnData.setCode(0);
@@ -315,8 +315,8 @@ public class RestaurantController {
               .get().getBookingTimeSlots();
 
         for (int i=0;i<7 ; i++) {
-            final LocalTime startTime = businessHours.get(i).getStartTime();
-            final LocalTime endTime = businessHours.get(i).getEndTime();
+             LocalTime startTime = businessHours.get(i).getStartTime();
+             LocalTime endTime = businessHours.get(i).getEndTime();
 
             List<TimeSlot> listOfSlots = new ArrayList<>();
 
