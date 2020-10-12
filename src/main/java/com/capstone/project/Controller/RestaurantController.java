@@ -302,6 +302,7 @@ public class RestaurantController {
         for(BusinessHours b : businessHours){
             businessHoursRepository.save(b);
         }
+        modifyTimeSlots(restaurantId,businessHours);
         returnData.setObject(businessHours);
         returnData.setCode(0);
         returnData.setMessage("Business Hours Updated Successfully");
