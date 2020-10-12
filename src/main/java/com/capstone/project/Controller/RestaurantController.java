@@ -318,14 +318,14 @@ public class RestaurantController {
             final LocalTime startTime = businessHours.get(i).getStartTime();
             final LocalTime endTime = businessHours.get(i).getEndTime();
 
-            List<TimeSlot> listOfSlotForTheDay = new ArrayList<>();
+            List<TimeSlot> listOfSlots = new ArrayList<>();
 
             LocalTime startTimeCpy = startTime.plusMinutes(45);
             LocalTime endTimeCpy = startTimeCpy.plusMinutes(45);
             while (true) {
                 if (endTimeCpy.isBefore(endTime) && endTimeCpy.isAfter(startTime)) {
                     TimeSlot newSlot = TimeSlot.builder().time(startTimeCpy).build();
-                    listOfSlotForTheDay.add(newSlot);
+                    listOfSlots.add(newSlot);
                     startTimeCpy = startTimeCpy.plusMinutes(45);
                     endTimeCpy = startTimeCpy.plusMinutes(45);
                 } else {
@@ -334,10 +334,10 @@ public class RestaurantController {
                     break;
                 }
             }
-            fetchedTimeSlots.get(i).setTimeSlots(timeSlotRepository.saveAll(listOfSlotForTheDay));
+            fetchedTimeSlots.get(i).setTimeSlots(timeSlotRepository.saveAll(listOfSlots));
         }
 
-      return fetchedTimeSlots;
+      return timeSlotForDayRepository.saveAll(fetchedTimeSlots);
     };
 
     // Generate default hours for restaurant NOON to MIDNIGHT
