@@ -296,14 +296,48 @@ public class RestaurantController {
 
     //Edit Restaurant business hours
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/{id}/businessHours")
-    public ReturnData editBusinessHours(@PathVariable("id") Long restaurantId, @RequestBody List<TimeSlotForDay> timeSlotsForDay) {
+    @PutMapping(value = "/{id}/businessHours",consumes = "application/json")
+    public ReturnData editBusinessHours(@PathVariable("id") Long restaurantId, @RequestBody List<BusinessHours> businessHours) {
         ReturnData returnData = new ReturnData();
-
-        timeSlotForDayRepository.saveAll(timeSlotsForDay);
-
+        for(BusinessHours b : businessHours){
+            businessHoursRepository.save(b);
+        }
+        returnData.setObject(businessHours);
+        returnData.setCode(0);
+        returnData.setMessage("Business Hours Updated Successfully");
         return returnData;
     }
+
+    // Modify booking time slot when business hours are changes
+    private List<TimeSlotForDay> modifyTimeSlots(Long restaurantId,List<BusinessHours> businessHours){
+      List<TimeSlotForDay> fetchedTimeSlots = restaurantRepo.findById(restaurantId)
+              .get().getBookingTimeSlots();
+
+        for (int i=0;i<7 ; i++) {
+            final LocalTime startTime = businessHours.get(i).getStartTime();
+            final LocalTime endTime = businessHours.get(i).getEndTime();
+
+            List<TimeSlot> listOfSlotForTheDay = new ArrayList<>();
+
+            LocalTime startTimeCpy = startTime.plusMinutes(45);
+            LocalTime endTimeCpy = startTimeCpy.plusMinutes(45);
+            while (true) {
+                if (endTimeCpy.isBefore(endTime) && endTimeCpy.isAfter(startTime)) {
+                    TimeSlot newSlot = TimeSlot.builder().time(startTimeCpy).build();
+                    listOfSlotForTheDay.add(newSlot);
+                    startTimeCpy = startTimeCpy.plusMinutes(45);
+                    endTimeCpy = startTimeCpy.plusMinutes(45);
+                } else {
+                /* Current time slot will end after the restaurant is closed so we
+                 cannot consider this time slot */
+                    break;
+                }
+            }
+            fetchedTimeSlots.get(i).setTimeSlots(timeSlotRepository.saveAll(listOfSlotForTheDay));
+        }
+
+      return fetchedTimeSlots;
+    };
 
     // Generate default hours for restaurant NOON to MIDNIGHT
     private List<BusinessHours> generateDefaultBusinessHours() {
@@ -336,7 +370,7 @@ public class RestaurantController {
                     endTimeCpy = startTimeCpy.plusMinutes(45);
                 } else {
                 /* Current time slot will end after the restaurant is closed so we
-                 cannot considered this time slot */
+                 cannot consider this time slot */
                     break;
                 }
             }

@@ -33,6 +33,9 @@ public class Order {
     private InRestaurantOrder isInRestaurantOrder;
 
     @OneToOne
+    private Reservation isDineIn;
+
+    @OneToOne
     private User user;
 
     private Float tax;

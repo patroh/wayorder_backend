@@ -41,6 +41,7 @@ public class OrderController {
             tax += (quantity * ((dishPrice * dishTax) / 100));
         }
         Restaurant restaurant = restaurantRepo.findById(id).get();
+
         Order newOrder = Order.builder().restaurant(restaurant).user(user).
                 orderItems(items).total(total).tax(tax).build();
 
