@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -149,8 +150,11 @@ public class RestaurantTableController {
                 List<SeatingArrangement> assignedTables = joinTables(
                         restaurantTables, timeSlot, partySize
                 );
-
-                returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
+                if(assignedTables.size() == 0){
+                    returnData.setMessage("No available tables");
+                }else {
+                    returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
+                }
 
             } else {
                 // Join the tables
@@ -180,11 +184,14 @@ public class RestaurantTableController {
 
 
     private List<RestaurantTable> getTablesGreaterThenPartySize(List<RestaurantTable> tableList, Integer partySize) {
-        return tableList.stream().filter(t -> t.getCapacity() >= partySize).collect(Collectors.toList());
+        return tableList.stream().filter(t -> t.getCapacity() >= partySize)
+                .sorted(Comparator.comparing(RestaurantTable::getCapacity)).collect(Collectors.toList());
     }
 
     private List<RestaurantTable> getTablesLessThenPartySize(List<RestaurantTable> tableList, Integer partySize) {
-        return tableList.stream().filter(t -> t.getCapacity() < partySize).collect(Collectors.toList());
+        return tableList.stream().filter(t -> t.getCapacity() <= partySize)
+                .sorted(Comparator.comparing(RestaurantTable::getCapacity))
+                .collect(Collectors.toList());
     }
 
     private SeatingArrangement makeNewBooking(TimeSlot timeSlot, RestaurantTable table, Integer partySize) {
@@ -196,28 +203,39 @@ public class RestaurantTableController {
     }
 
     private Reservation makeFinalReservation(List<SeatingArrangement> seating, User user) {
+        for(SeatingArrangement s : seating){
+            System.out.println("ID : " + s.getId());
+            System.out.println("TABLE CAP : " + s.getTable().getCapacity());
+            System.out.println("PARTY SIZE : " + s.getPartySize());
+        }
         List<SeatingArrangement> savedSeatings = seatingArrangementRepository.saveAll(seating);
+        //List<SeatingArrangement> savedSeatings = seating;
         Reservation newReservation = new Reservation();
         newReservation.setDate(LocalDate.now());
         newReservation.setTime(seating.get(0).getTimeSlot().getTime());
         newReservation.setUser(user);
         newReservation.setSeatingArrangement(savedSeatings);
 
+        //return newReservation;
         return reservationRepository.save(newReservation);
     }
 
     private List<SeatingArrangement> joinTables(List<RestaurantTable> availableTables, TimeSlot timeSlot, Integer partySize) {
         List<SeatingArrangement> holdSeating = new ArrayList<>();
+        if(partySize > calculateMaxAvailableCapacity(availableTables))
+            return holdSeating;
         List<RestaurantTable> tablesLessThanPartySize = getTablesLessThenPartySize(availableTables, partySize);
         List<RestaurantTable> holdTable = new ArrayList<>();
 
-        SeatingArrangement holdBooking = makeNewBooking(timeSlot, tablesLessThanPartySize.get(0), partySize);
+
+        SeatingArrangement holdBooking = makeNewBooking(timeSlot, tablesLessThanPartySize.get(0), tablesLessThanPartySize.get(0).getCapacity());
         holdTable.add(tablesLessThanPartySize.get(0));
         holdSeating.add(holdBooking);
-
         partySize = partySize - tablesLessThanPartySize.get(0).getCapacity();
 
-        while (partySize >= 0) {
+
+        while (partySize > 0) {
+            System.out.println("PARTY SIZE IS : "+partySize);
             RestaurantTable leaseDifference = tablesLessThanPartySize.get(1);
             for (int i = 1; i < tablesLessThanPartySize.size(); i++) {
                 RestaurantTable currentTable = tablesLessThanPartySize.get(i);
@@ -227,11 +245,25 @@ public class RestaurantTableController {
                     }
                 }
             }
-            partySize = partySize - leaseDifference.getCapacity();
-            holdBooking = makeNewBooking(timeSlot, leaseDifference, partySize);
+            int seatingPartySize = partySize;
+            if(partySize>=leaseDifference.getCapacity())
+                seatingPartySize = leaseDifference.getCapacity();
+            holdBooking = makeNewBooking(timeSlot, leaseDifference, seatingPartySize);
+
             holdTable.add(leaseDifference);
             holdSeating.add(holdBooking);
+            partySize = partySize - leaseDifference.getCapacity();
         }
         return holdSeating;
+    }
+
+    private int calculateMaxAvailableCapacity(List<RestaurantTable> availableTables){
+        int max = 0;
+
+        for(RestaurantTable t : availableTables){
+            max+=t.getCapacity();
+        }
+
+        return max;
     }
 }
