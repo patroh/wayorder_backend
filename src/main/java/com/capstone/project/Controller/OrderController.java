@@ -28,7 +28,7 @@ public class OrderController {
         float total = 0;
         float tax = 0;
         User user = userRepository.findById(uid).get();
-        List<OrderItem> savedItems = orderItemRepository.saveAll(items);
+        List<OrderItem> savedItems = orderItemRepository.saveAll(holder.getItems());
         for (OrderItem o : savedItems) {
             float quantity = o.getQuantity();
             float dishPrice = o.getDish().getPrice();
