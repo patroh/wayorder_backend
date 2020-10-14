@@ -149,7 +149,7 @@ public class RestaurantTableController {
     }
 
     @CrossOrigin(origins = "*")
-    @GetMapping(value = "/check/{partySize}",consumes = "application/json")
+    @PostMapping(value = "/check/{partySize}", consumes = "application/json")
     public ReturnData checkTableAvailability(@PathVariable("id") Long id,@PathVariable("partySize") Integer partySize, @RequestBody TimeSlot timeSlot){
         ReturnData returnData = new ReturnData();
         Restaurant restaurant = restaurantRepository.findById(id).get();
