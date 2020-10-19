@@ -139,11 +139,14 @@ public class RestaurantTableController {
 
         if(partySize>calculateMaxAvailableCapacity(availableTables)){
             returnData.setMessage("No table available for the time slot");
+            returnData.setCode(1);
             return returnData;
         }
         List<SeatingArrangement> assignedTables = joinTables(
                 availableTables, timeSlot, partySize
         );
+        returnData.setMessage("Booking done");
+        returnData.setCode(0);
         returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
         return returnData;
     }

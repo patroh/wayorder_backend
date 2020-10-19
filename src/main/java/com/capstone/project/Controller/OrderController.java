@@ -41,7 +41,7 @@ public class OrderController {
         Order newOrder = Order.builder().restaurant(restaurant).user(user).
                 orderItems(holder.getItems()).total(total).tax(tax).build();
         if(holder.getDineInOrder()!=null){
-
+            newOrder.setIsDineIn(holder.getDineInOrder());
         }else if (holder.getTakeoutOrder()!=null){
             TakeoutOrder newTakeOutOrder = takeOutOrderRepository.save(holder.getTakeoutOrder());
             newOrder.setIsTakeOutOrder(newTakeOutOrder);

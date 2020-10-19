@@ -1,9 +1,6 @@
 package com.capstone.project.Bean.Holders;
 
-import com.capstone.project.Bean.DineInOrder;
-import com.capstone.project.Bean.InRestaurantOrder;
-import com.capstone.project.Bean.OrderItem;
-import com.capstone.project.Bean.TakeoutOrder;
+import com.capstone.project.Bean.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +16,6 @@ import java.util.List;
 public class OrderItems_OrderType_Holder {
     private List<OrderItem> items = new ArrayList<>();
     private TakeoutOrder takeoutOrder;
-    private DineInOrder dineInOrder;
+    private Reservation dineInOrder;
     private InRestaurantOrder inRestaurantOrder;
 }
