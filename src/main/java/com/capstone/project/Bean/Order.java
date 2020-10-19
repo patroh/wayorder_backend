@@ -29,13 +29,13 @@ public class Order {
 
     private LocalDateTime orderPlacedTime = LocalDateTime.now();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private TakeoutOrder isTakeOutOrder;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private InRestaurantOrder isInRestaurantOrder;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Reservation isDineIn;
 
     @OneToOne
