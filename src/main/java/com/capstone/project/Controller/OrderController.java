@@ -46,7 +46,7 @@ public class OrderController {
             TakeoutOrder newTakeOutOrder = takeOutOrderRepository.save(holder.getTakeoutOrder());
             newOrder.setIsTakeOutOrder(newTakeOutOrder);
         }else if (holder.getInRestaurantOrder()!=null){
-
+            newOrder.setIsInRestaurantOrder(holder.getInRestaurantOrder());
         }
         Order placedOrder = orderRepository.save(newOrder);
 

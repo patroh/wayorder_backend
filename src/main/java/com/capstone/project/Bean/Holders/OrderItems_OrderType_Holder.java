@@ -17,5 +17,5 @@ public class OrderItems_OrderType_Holder {
     private List<OrderItem> items = new ArrayList<>();
     private TakeoutOrder takeoutOrder;
     private Reservation dineInOrder;
-    private InRestaurantOrder inRestaurantOrder;
+    private RestaurantTable inRestaurantOrder;
 }

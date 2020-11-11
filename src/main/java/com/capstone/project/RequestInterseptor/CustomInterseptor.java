@@ -16,24 +16,23 @@ public class CustomInterseptor extends HandlerInterceptorAdapter {
             HttpServletRequest request,
             HttpServletResponse response,
             Object handler) {
-//        String token = request.getHeader("Authorization");
-//        System.out.println(token);
-//        try {
-//            System.out.println("Decoding JWT");
-//            DecodedJWT jwt = JWT.decode(token);
-//            System.out.println("Decode Done");
-//            if(jwt.getIssuer().equals(issuerId)){
-//                System.out.println("Request granted");
-//                return true;
-//            }else{
-//                return false;
-//            }
-//        } catch (Exception exception){
-//            //Invalid token
-//            System.out.println("Cannot decode secret key");
-//            return true;
-//        }
-        return true;
+        String token = request.getHeader("Authorization");
+        System.out.println(token);
+        try {
+            System.out.println("Decoding JWT");
+            DecodedJWT jwt = JWT.decode(token);
+            System.out.println("Decode Done");
+            if(jwt.getIssuer().equals(issuerId)){
+                System.out.println("Request granted");
+                return true;
+            }else{
+                return false;
+            }
+        } catch (Exception exception){
+            //Invalid token
+            System.out.println("Cannot decode secret key");
+            return true;
+        }
     }
     @Override
     public void postHandle(

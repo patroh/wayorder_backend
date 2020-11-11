@@ -33,7 +33,7 @@ public class Order {
     private TakeoutOrder isTakeOutOrder;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    private InRestaurantOrder isInRestaurantOrder;
+    private RestaurantTable isInRestaurantOrder;
 
     @OneToOne(cascade = CascadeType.MERGE)
     private Reservation isDineIn;
