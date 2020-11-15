@@ -42,9 +42,9 @@ public class OrderController {
         Restaurant restaurant = restaurantRepo.findById(id).get();
 
         Order newOrder = Order.builder().restaurant(restaurant).user(user).
-                orderItems(holder.getItems()).total(total).tax(tax).orderPlacedTime(LocalDateTime.now().truncatedTo(
+                orderItems(holder.getItems()).total(total).tax(tax).orderPlacedTime(LocalDateTime.now(ZoneOffset.UTC).truncatedTo(
                 ChronoUnit.SECONDS
-        ).now(ZoneOffset.UTC)).build();
+        )).build();
         if(holder.getDineInOrder()!=null){
             newOrder.setIsDineIn(holder.getDineInOrder());
         }else if (holder.getTakeoutOrder()!=null){
