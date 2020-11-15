@@ -32,7 +32,7 @@ public class Order {
     @OneToOne(cascade = CascadeType.MERGE)
     private TakeoutOrder isTakeOutOrder;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     private RestaurantTable isInRestaurantOrder;
 
     @OneToOne(cascade = CascadeType.MERGE)
