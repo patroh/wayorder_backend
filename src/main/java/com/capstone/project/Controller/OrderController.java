@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class OrderController {
         Order newOrder = Order.builder().restaurant(restaurant).user(user).
                 orderItems(holder.getItems()).total(total).tax(tax).orderPlacedTime(LocalDateTime.now().truncatedTo(
                 ChronoUnit.SECONDS
-        )).build();
+        ).now(ZoneOffset.UTC)).build();
         if(holder.getDineInOrder()!=null){
             newOrder.setIsDineIn(holder.getDineInOrder());
         }else if (holder.getTakeoutOrder()!=null){
