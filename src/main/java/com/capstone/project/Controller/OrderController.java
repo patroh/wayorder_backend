@@ -8,6 +8,7 @@ import com.pusher.rest.Pusher;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,7 @@ public class OrderController {
         Restaurant restaurant = restaurantRepo.findById(id).get();
 
         Order newOrder = Order.builder().restaurant(restaurant).user(user).
-                orderItems(holder.getItems()).total(total).tax(tax).build();
+                orderItems(holder.getItems()).total(total).tax(tax).orderPlacedTime(LocalDateTime.now()).build();
         if(holder.getDineInOrder()!=null){
             newOrder.setIsDineIn(holder.getDineInOrder());
         }else if (holder.getTakeoutOrder()!=null){
