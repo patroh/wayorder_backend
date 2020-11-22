@@ -122,8 +122,10 @@ public class RestaurantTableController {
 
 
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/{uid}/book/{partySize}", consumes = "application/json")
-    public ReturnData bookTable(@PathVariable("id") Long id, @PathVariable("uid") Long uid, @PathVariable("partySize") Integer partySize, @RequestBody TimeSlot timeSlot) {
+    @PutMapping(value = "/{uid}/book/{partySize}/{check}", consumes = "application/json")
+    public ReturnData bookTable(@PathVariable("id") Long id, @PathVariable("uid") Long uid, @PathVariable("partySize") Integer partySize,
+                                @PathVariable("check") Integer check,@RequestBody TimeSlot timeSlot) {
+        // Variable CHECK : 0= retrieve assigned tables , 1=make booking after approval
         ReturnData returnData = new ReturnData();
 
         Restaurant restaurant = restaurantRepository.findById(id).get();
@@ -145,10 +147,17 @@ public class RestaurantTableController {
         List<SeatingArrangement> assignedTables = joinTables(
                 availableTables, timeSlot, partySize
         );
-        returnData.setMessage("Booking done");
-        returnData.setCode(0);
-        returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
-        return returnData;
+        if(check==0){
+            returnData.setMessage("Tables assigned");
+            returnData.setCode(0);
+            returnData.setObject(assignedTables);
+        }
+        if(check==1) {
+            returnData.setMessage("Booking done");
+            returnData.setCode(0);
+            returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
+            return returnData;
+        }
     }
 
     @CrossOrigin(origins = "*")
