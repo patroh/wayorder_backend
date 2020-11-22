@@ -156,8 +156,8 @@ public class RestaurantTableController {
             returnData.setMessage("Booking done");
             returnData.setCode(0);
             returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
-            return returnData;
         }
+        return returnData;
     }
 
     @CrossOrigin(origins = "*")
