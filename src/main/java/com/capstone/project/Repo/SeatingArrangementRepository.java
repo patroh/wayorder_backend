@@ -1,5 +1,7 @@
 package com.capstone.project.Repo;
-
+/**
+ * @author Rohan Patel
+ */
 import com.capstone.project.Bean.SeatingArrangement;
 import com.capstone.project.Bean.TimeSlot;
 import org.springframework.data.jpa.repository.JpaRepository;

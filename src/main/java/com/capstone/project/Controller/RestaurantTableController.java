@@ -1,7 +1,11 @@
 package com.capstone.project.Controller;
+/**
+ * @author Rohan Patel
+ */
 
-import com.capstone.project.Bean.*;
+
 import com.capstone.project.Bean.Holders.ReturnData;
+import com.capstone.project.Bean.*;
 import com.capstone.project.Repo.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +36,15 @@ public class RestaurantTableController {
         return returnData;
     }
 
+
+    /**
+     * <p>
+     *     This method returns the table information for a particular table ID to the front end
+     * </p>
+     * @param id
+     * @param tid
+     * @return
+     */
     //Get a particular table info
     @GetMapping("/{tid}")
     public ReturnData getTableInfo(@PathVariable("id") Long id, @PathVariable("tid") Long tid) {
@@ -61,6 +74,11 @@ public class RestaurantTableController {
     }
 
 
+    /**
+     * This method adds a new table to the database by checking if there is already a table with same number or not
+     * @param id
+     * @param table
+     */
     // Add new table to restaurant
     @CrossOrigin(origins = "*")
     @PutMapping(value = "", consumes = "application/json")
@@ -121,10 +139,23 @@ public class RestaurantTableController {
     }
 
 
+    /**
+     * <p>
+     *     This Method takes the UserID, Party size and the check param to book a table for the user. the check
+     *     param is used to determine whether to make the table reservation final or not. If check is 0 then the
+     *     program wait for the restaurant to approve the table and when the check is 1 then the table is finally
+     *     reserved in the database
+     * </p>
+     * @param id
+     * @param uid
+     * @param partySize
+     * @param check
+     * @param timeSlot
+     */
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{uid}/book/{partySize}/{check}", consumes = "application/json")
     public ReturnData bookTable(@PathVariable("id") Long id, @PathVariable("uid") Long uid, @PathVariable("partySize") Integer partySize,
-                                @PathVariable("check") Integer check,@RequestBody TimeSlot timeSlot) {
+                                @PathVariable("check") Integer check, @RequestBody TimeSlot timeSlot) {
         // Variable CHECK : 0= retrieve assigned tables , 1=make booking after approval
         ReturnData returnData = new ReturnData();
 
@@ -139,7 +170,7 @@ public class RestaurantTableController {
                     collect(Collectors.toList());
         }
 
-        if(partySize>calculateMaxAvailableCapacity(availableTables)){
+        if (partySize > calculateMaxAvailableCapacity(availableTables)) {
             returnData.setMessage("No table available for the time slot");
             returnData.setCode(1);
             return returnData;
@@ -147,12 +178,12 @@ public class RestaurantTableController {
         List<SeatingArrangement> assignedTables = joinTables(
                 availableTables, timeSlot, partySize
         );
-        if(check==0){
+        if (check == 0) {
             returnData.setMessage("Tables assigned");
             returnData.setCode(0);
             returnData.setObject(assignedTables);
         }
-        if(check==1) {
+        if (check == 1) {
             returnData.setMessage("Booking done");
             returnData.setCode(0);
             returnData.setObject(makeFinalReservation(assignedTables, userRepository.findById(uid).get()));
@@ -162,7 +193,7 @@ public class RestaurantTableController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/check/{partySize}", consumes = "application/json")
-    public ReturnData checkTableAvailability(@PathVariable("id") Long id,@PathVariable("partySize") Integer partySize, @RequestBody TimeSlot timeSlot){
+    public ReturnData checkTableAvailability(@PathVariable("id") Long id, @PathVariable("partySize") Integer partySize, @RequestBody TimeSlot timeSlot) {
         ReturnData returnData = new ReturnData();
         Restaurant restaurant = restaurantRepository.findById(id).get();
         List<RestaurantTable> restaurantTables = restaurant.getTables();
@@ -172,7 +203,7 @@ public class RestaurantTableController {
             availableTables = availableTables.stream().filter(t -> t.getId() != s.getTable().getId()).
                     collect(Collectors.toList());
         }
-        if(partySize>calculateMaxAvailableCapacity(availableTables)){
+        if (partySize > calculateMaxAvailableCapacity(availableTables)) {
             returnData.setMessage("No table available for the time slot");
             returnData.setCode(1);
             return returnData;
@@ -210,18 +241,27 @@ public class RestaurantTableController {
     }
 
 
-
+    /**
+     * <p>
+     *     This method takes available table list, time slot and party size to determine the best table combination
+     *     based on the party size and availability. The algorithm is based on ranking which means the table with the
+     *     minimum difference with party size (Table Capacity - PartySize) wins and is assigned to the customer.
+     * </p>
+     * @param availableTables
+     * @param timeSlot
+     * @param partySize
+     */
     private List<SeatingArrangement> joinTables(List<RestaurantTable> availableTables, TimeSlot timeSlot, Integer partySize) {
 
         // Sorted list of available tables for the particular time slot
-        availableTables = availableTables.stream().sorted(Comparator.comparing(RestaurantTable::getCapacity)).collect(Collectors.toList());
+        availableTables = availableTables.stream().sorted(Comparator.comparing(RestaurantTable::getCapacity))
+                .collect(Collectors.toList());
 
-        // Seating arrangement that are made
+        // Empty list of Seating arrangement that will be made
         List<SeatingArrangement> reservedSeatingArrangement = new ArrayList<>();
 
-
         while (partySize > 0) {
-            int i = 0;
+            int i = 0;//Index of the table from available table list
             HashMap<Integer, Integer> difference = new HashMap<>();
             for (RestaurantTable table : availableTables) {
                 difference.put(Math.abs(table.getCapacity() - partySize), i);
@@ -231,9 +271,9 @@ public class RestaurantTableController {
             Collections.sort(differenceList);
             int minimumDifference = differenceList.get(0);
             int minimumIndex = difference.get(minimumDifference);
-            RestaurantTable foundTable = availableTables.get(minimumIndex);
+            RestaurantTable foundTable = availableTables.get(minimumIndex); // Table with the min difference
             int partySizeForTheTable = partySize;
-            if(partySize>=foundTable.getCapacity())
+            if (partySize >= foundTable.getCapacity())
                 partySizeForTheTable = foundTable.getCapacity();
             SeatingArrangement reservedArrangement = makeNewBooking(timeSlot, foundTable, partySizeForTheTable);
             partySize -= foundTable.getCapacity();

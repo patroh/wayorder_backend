@@ -1,15 +1,15 @@
 package com.capstone.project.Controller;
+/**
+ * @author Rohan Patel
+ */
 
 import com.capstone.project.Bean.*;
 import com.capstone.project.Bean.Holders.Restaurant_User_Holder;
 import com.capstone.project.Bean.Holders.ReturnData;
 import com.capstone.project.Repo.*;
 import lombok.AllArgsConstructor;
-import net.bytebuddy.asm.Advice;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
-import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -68,6 +68,14 @@ public class RestaurantController {
     }
 
 
+    /**
+     * <p>
+     *     This method creates a new category for the restaurant. Eg: Breakfast, Lunch, Dinner etc..
+     * </p>
+     * @param category
+     * @param id
+     * @return
+     */
     //Add new menu category
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{id}/menu/category", consumes = "application/json")
@@ -152,6 +160,16 @@ public class RestaurantController {
     }
 
 
+    /**
+     * <p>
+     *     This method updates the menu item with the passed arguments
+     * </p>
+     * @param restaurantId
+     * @param fromCategoryId
+     * @param categoryId
+     * @param dish
+     * @return
+     */
     //Edit menu item
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/{id}/menu/item", consumes = "application/json")
@@ -233,6 +251,16 @@ public class RestaurantController {
         return returnData;
     }
 
+
+    /**
+     * <p>
+     *     This method takes in the firebase storage image URL and the access token which is then combined
+     *     together and added to the restaurant logo parameter.
+     * </p>
+     * @param restaurantId
+     * @param logoUrl
+     * @param token
+     */
     //Upload restaurant logo
     @CrossOrigin(origins = "*")
     @PutMapping(value = "/{id}/logo")
@@ -295,15 +323,24 @@ public class RestaurantController {
         return restaurantRepo.findAll();
     }
 
+
+    /**
+     *<p>
+     *     This method creates time slots for restaurant table reservation. The time slots are between the restaurant
+     *     start time and end time for the day and each time slot is of 45min in length.
+     *</p>
+     * @param restaurantId
+     * @param businessHours
+     */
     //Edit Restaurant business hours
     @CrossOrigin(origins = "*")
-    @PutMapping(value = "/{id}/businessHours",consumes = "application/json")
+    @PutMapping(value = "/{id}/businessHours", consumes = "application/json")
     public ReturnData editBusinessHours(@PathVariable("id") Long restaurantId, @RequestBody List<BusinessHours> businessHours) {
         ReturnData returnData = new ReturnData();
-        for(BusinessHours b : businessHours){
+        for (BusinessHours b : businessHours) {
             businessHoursRepository.save(b);
         }
-        modifyTimeSlots(restaurantId,businessHours);
+        modifyTimeSlots(restaurantId, businessHours);
         returnData.setObject(businessHours);
         returnData.setCode(0);
         returnData.setMessage("Business Hours Updated Successfully");
@@ -311,13 +348,13 @@ public class RestaurantController {
     }
 
     // Modify booking time slot when business hours are changes
-    private List<TimeSlotForDay> modifyTimeSlots(Long restaurantId,List<BusinessHours> businessHours){
-      List<TimeSlotForDay> fetchedTimeSlots = restaurantRepo.findById(restaurantId)
-              .get().getBookingTimeSlots();
+    private List<TimeSlotForDay> modifyTimeSlots(Long restaurantId, List<BusinessHours> businessHours) {
+        List<TimeSlotForDay> fetchedTimeSlots = restaurantRepo.findById(restaurantId)
+                .get().getBookingTimeSlots();
 
-        for (int i=0;i<7 ; i++) {
-             LocalTime startTime = businessHours.get(i).getStartTime();
-             LocalTime endTime = businessHours.get(i).getEndTime();
+        for (int i = 0; i < 7; i++) {
+            LocalTime startTime = businessHours.get(i).getStartTime();
+            LocalTime endTime = businessHours.get(i).getEndTime();
 
             List<TimeSlot> listOfSlots = new ArrayList<>();
 
@@ -338,8 +375,8 @@ public class RestaurantController {
             fetchedTimeSlots.get(i).setTimeSlots(timeSlotRepository.saveAll(listOfSlots));
         }
 
-      return timeSlotForDayRepository.saveAll(fetchedTimeSlots);
-    };
+        return timeSlotForDayRepository.saveAll(fetchedTimeSlots);
+    }
 
     // Generate default hours for restaurant NOON to MIDNIGHT
     private List<BusinessHours> generateDefaultBusinessHours() {
@@ -351,8 +388,6 @@ public class RestaurantController {
         }
         return businessHoursRepository.saveAll(defaultHours);
     }
-
-    ;
 
     // Generate default timeSlots for the restaurant
     private List<TimeSlotForDay> generateDefaultTimeSlots() {
@@ -386,5 +421,4 @@ public class RestaurantController {
         return timeSlotForDayRepository.saveAll(defaultTimeSlots);
     }
 
-    ;
 }

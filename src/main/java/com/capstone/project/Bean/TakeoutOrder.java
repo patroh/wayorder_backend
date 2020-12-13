@@ -1,5 +1,7 @@
 package com.capstone.project.Bean;
-
+/**
+ * @author Rohan Patel
+ */
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

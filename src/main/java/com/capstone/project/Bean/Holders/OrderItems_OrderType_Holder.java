@@ -1,6 +1,9 @@
 package com.capstone.project.Bean.Holders;
 
-import com.capstone.project.Bean.*;
+import com.capstone.project.Bean.OrderItem;
+import com.capstone.project.Bean.Reservation;
+import com.capstone.project.Bean.RestaurantTable;
+import com.capstone.project.Bean.TakeoutOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

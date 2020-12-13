@@ -1,8 +1,11 @@
 package com.capstone.project.Controller;
+/**
+ * @author Rohan Patel
+ */
 
-import com.capstone.project.Bean.*;
 import com.capstone.project.Bean.Holders.OrderItems_OrderType_Holder;
 import com.capstone.project.Bean.Holders.ReturnData;
+import com.capstone.project.Bean.*;
 import com.capstone.project.Repo.*;
 import com.pusher.rest.Pusher;
 import lombok.AllArgsConstructor;
@@ -24,6 +27,17 @@ public class OrderController {
     private final TakeOutOrderRepository takeOutOrderRepository;
 
 
+    /**
+     * <p>
+     *     This method takes in the List of dishes, UserID, Type of Order and the restaurant ID and then calculates the
+     *     total/tax for the order and make an entry for the order in the database and then return the created
+     *     order back.
+     *     Type of orders are : DineIn, Takeout, Table Order
+     * </p>
+     * @param holder
+     * @param id
+     * @param uid
+     */
     //Makes an order from the items , save to repository and return the saved order.
     @PostMapping(value = "/{id}/{uid}", produces = "application/json")
     public Order makeOrder(@RequestBody OrderItems_OrderType_Holder holder, @PathVariable Long id, @PathVariable Long uid) {
@@ -42,15 +56,14 @@ public class OrderController {
         Restaurant restaurant = restaurantRepo.findById(id).get();
 
         Order newOrder = Order.builder().restaurant(restaurant).user(user).
-                    orderItems(holder.getItems()).total(total).tax(tax).orderPlacedTime(LocalDateTime.now(ZoneOffset.UTC).truncatedTo(
-                    ChronoUnit.SECONDS
-            )).build();
-        if(holder.getDineInOrder()!=null){
+                orderItems(holder.getItems()).total(total).tax(tax).orderPlacedTime(LocalDateTime.now(ZoneOffset.UTC).
+                truncatedTo(ChronoUnit.SECONDS)).build();
+        if (holder.getDineInOrder() != null) {
             newOrder.setIsDineIn(holder.getDineInOrder());
-        }else if (holder.getTakeoutOrder()!=null){
+        } else if (holder.getTakeoutOrder() != null) {
             TakeoutOrder newTakeOutOrder = takeOutOrderRepository.save(holder.getTakeoutOrder());
             newOrder.setIsTakeOutOrder(newTakeOutOrder);
-        }else if (holder.getInRestaurantOrder()!=null){
+        } else if (holder.getInRestaurantOrder() != null) {
             newOrder.setIsInRestaurantOrder(holder.getInRestaurantOrder());
         }
         Order placedOrder = orderRepository.save(newOrder);

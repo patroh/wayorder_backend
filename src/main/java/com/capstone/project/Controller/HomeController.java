@@ -1,4 +1,7 @@
 package com.capstone.project.Controller;
+/**
+ * @author Rohan Patel
+ */
 
 import com.capstone.project.Bean.EmailNewsletter;
 import com.capstone.project.Repo.EmailNewsletterRepository;

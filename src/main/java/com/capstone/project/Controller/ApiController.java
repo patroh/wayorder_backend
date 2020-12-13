@@ -1,18 +1,17 @@
 package com.capstone.project.Controller;
+/**
+ * @author Rohan Patel
+ */
 
 import com.capstone.project.Bean.EmailNewsletter;
 import com.capstone.project.Bean.Holders.ReturnData;
 import com.capstone.project.Repo.EmailNewsletterRepository;
 import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.twiml.MessagingResponse;
-import com.twilio.twiml.messaging.Body;
-import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -21,9 +20,10 @@ import java.util.List;
 public class ApiController {
     private final EmailNewsletterRepository emailNewsletterRepository;
 
+
     @CrossOrigin("*")
     @PostMapping("/message")
-    public ReturnData sendSms(@RequestBody String phoneNumber){
+    public ReturnData sendSms(@RequestBody String phoneNumber) {
         ReturnData returnData = new ReturnData();
         returnData.setMessage("");
         final String ACCOUNT_SID =
@@ -34,14 +34,14 @@ public class ApiController {
 
 
         Message message = Message
-                .creator(new PhoneNumber("+1"+phoneNumber), // to
+                .creator(new PhoneNumber("+1" + phoneNumber), // to
                         new PhoneNumber("+12515128841"), // from
                         "Thank you for your interest in WayOrder.\nWe will send you download link when the app is ready :)")
                 .create();
 
-        returnData.setMessage(""+message.getSid());
+        returnData.setMessage("" + message.getSid());
         return returnData;
-    };
+    }
 
     @GetMapping("/emailNewsletters")
     public List<EmailNewsletter> getAllEmailNewsletter() {
