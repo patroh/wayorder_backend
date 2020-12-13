@@ -1,6 +1,7 @@
 package com.capstone.project.Controller;
 /**
  * @author Rohan Patel
+ * @author Vishvakumar Mavani
  */
 
 import com.capstone.project.Bean.EmailNewsletter;
@@ -21,6 +22,16 @@ public class ApiController {
     private final EmailNewsletterRepository emailNewsletterRepository;
 
 
+    /**
+     * <p>
+     *     Method to send a text message to customer on the phone number entered.
+     *     For development purpose, the phone number should be authorized on twilio to
+     *     allow sending message
+     * </p>
+     * @author Vishvakumar Mavani
+     * @param phoneNumber
+     * @return
+     */
     @CrossOrigin("*")
     @PostMapping("/message")
     public ReturnData sendSms(@RequestBody String phoneNumber) {
@@ -36,7 +47,8 @@ public class ApiController {
         Message message = Message
                 .creator(new PhoneNumber("+1" + phoneNumber), // to
                         new PhoneNumber("+12515128841"), // from
-                        "Thank you for your interest in WayOrder.\nWe will send you download link when the app is ready :)")
+                        "Thank you for your interest in WayOrder.\n" +
+                                "We will send you download link when the app is ready :)")
                 .create();
 
         returnData.setMessage("" + message.getSid());
